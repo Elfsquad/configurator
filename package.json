@@ -1,0 +1,44 @@
+{
+  "name": "@elfsquad/configurator",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --collectCoverage",
+    "build": "webpack",
+    "watch": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elfsquad/configurator.git"
+  },
+  "author": "Elfsquad",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/Elfsquad/configurator/issues"
+  },
+  "homepage": "https://github.com/Elfsquad/configurator#readme",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@types/fetch-mock": "7.3.5",
+    "@types/jest": "^26.0.24",
+    "fetch-mock": "^9.11.0",
+    "jest": "^27.0.6",
+    "node-fetch": "^2.6.1",
+    "nyc": "^15.1.0",
+    "ts-jest": "^27.0.4",
+    "ts-loader": "^9.2.5",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5",
+    "webpack": "^5.50.0",
+    "webpack-cli": "^4.7.2"
+  }
+}
