@@ -1,3 +1,5 @@
+import {Mapped3dItems} from "./Configuration";
+
 export class Layout3d {
     configurationId: string;
     urn: string;
@@ -6,13 +8,6 @@ export class Layout3d {
     z: number;
     rotationY: number;
     mapped3dItems: Mapped3dItems;
-}
-
-export class Mapped3dItems {
-    visibleItems: string[];
-    hiddenItems: string[];
-    itemColors: { [nodeId: string]: number[] };
-    itemMaterials: { [objectId: string]: Material };
 }
 
 export class Material {
