@@ -8,7 +8,7 @@ import { AuthenticationMethod, IConfiguratorOptions } from './IConfiguratorOptio
 export class ConfiguratorContext {
 
     public authenticationContext: AuthenticationContext;
-    private configuration: Configuration;
+    public configuration: Configuration;
 
     constructor(private options: IConfiguratorOptions) { 
 
