@@ -125,6 +125,8 @@ export class ConfigurationFeature {
     hiddenThreeDModelItems: string[];
     searchbarColumns: string[];
     featureType: FeatureType;
+    minValue: number;
+    maxValue: number;
 }
 
 export enum FeatureType {
