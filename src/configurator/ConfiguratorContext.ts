@@ -6,12 +6,12 @@ import { Settings } from '../models/Settings';
 import { AuthenticationMethod, IConfiguratorOptions } from './IConfiguratorOptions';
 
 export class ConfiguratorContext {
-
     public authenticationContext: AuthenticationContext;
-    public configuration: Configuration;
+    private configuration: Configuration;
+    private onUpdateListeners: ((c: Configuration) => void)[];
 
     constructor(private options: IConfiguratorOptions) { 
-
+        this.onUpdateListeners = [];
         if (!options.authenticationMethod){
             options.authenticationMethod = AuthenticationMethod.ANONYMOUS;
         }
@@ -48,13 +48,13 @@ export class ConfiguratorContext {
 
     public async newConfiguration(name: string): Promise<Configuration>{
         let result = await this.get(`${this.options.apiUrl}/configurator/1/configurator/new/${name}`);
-        this.configuration = (await result.json()) as Configuration;
+        await this.updateConfiguration((await result.json()) as Configuration);
         return this.configuration;
     }
 
     public async openConfiguration(configurationId: string) : Promise<Configuration>{
         let result = await this.get(`${this.options.apiUrl}/configurator/1/configurator/open/${configurationId}`);
-        this.configuration = (await result.json()) as Configuration;
+        await this.updateConfiguration((await result.json()) as Configuration);
         return this.configuration;
     }
 
@@ -64,7 +64,7 @@ export class ConfiguratorContext {
             isSelection,
             value
         });
-        this.configuration = (await result.json()) as Configuration;
+        await this.updateConfiguration((await result.json()) as Configuration);
         return this.configuration;
     }
 
@@ -73,13 +73,13 @@ export class ConfiguratorContext {
             featureModelNodeId,
             textValue
         });
-        this.configuration = (await result.json()) as Configuration;
+        await this.updateConfiguration((await result.json()) as Configuration);
         return this.configuration;
     }
 
     public async changeLanguage(languageIso: string): Promise<Configuration> {
         let result = await this.put(`${this.options.apiUrl}/configurator/1/configurator/${this.configuration.id}/changeLanguage`, languageIso);
-        this.configuration = (await result.json()) as Configuration;
+        await this.updateConfiguration((await result.json()) as Configuration);
         return this.configuration;
     }
 
@@ -101,6 +101,10 @@ export class ConfiguratorContext {
     public async getLayout3d(): Promise<Layout3d>{
         let result = await this.get(`${this.options.apiUrl}/configurator/1/configurator/${this.configuration.id}/3dlayout`);
         return await result.json() as Layout3d;
+    }
+    
+    public onUpdate(f: (c: Configuration) => void) {
+        this.onUpdateListeners.push(f);
     }
 
     private get(url:string): Promise<Response> {
@@ -140,4 +144,10 @@ export class ConfiguratorContext {
         }
     }
 
+    private async updateConfiguration(configuration: Configuration) {
+        this.configuration = configuration;
+        for(let i = 0; i < this.onUpdateListeners.length; i++) {
+            this.onUpdateListeners[i](configuration);
+        }
+    }
 }
