@@ -5,13 +5,12 @@ import { Layout3d } from '../models/Layout3d';
 import { Settings } from '../models/Settings';
 import { AuthenticationMethod, IConfiguratorOptions } from './IConfiguratorOptions';
 
-export class ConfiguratorContext {
+export class ConfiguratorContext extends EventTarget {
     public authenticationContext: AuthenticationContext;
     private configuration: Configuration;
-    private onUpdateListeners: ((c: Configuration) => void)[];
 
     constructor(private options: IConfiguratorOptions) { 
-        this.onUpdateListeners = [];
+        super();
         if (!options.authenticationMethod){
             options.authenticationMethod = AuthenticationMethod.ANONYMOUS;
         }
@@ -103,8 +102,8 @@ export class ConfiguratorContext {
         return await result.json() as Layout3d;
     }
     
-    public onUpdate(f: (c: Configuration) => void) {
-        this.onUpdateListeners.push(f);
+    public onUpdate(f: EventListener) {
+        this.addEventListener('onConfigurationUpdated', f);
     }
 
     private get(url:string): Promise<Response> {
@@ -146,8 +145,6 @@ export class ConfiguratorContext {
 
     private async updateConfiguration(configuration: Configuration) {
         this.configuration = configuration;
-        for(let i = 0; i < this.onUpdateListeners.length; i++) {
-            this.onUpdateListeners[i](configuration);
-        }
+        this.dispatchEvent(new CustomEvent('onConfigurationUpdated', {'detail': configuration}));
     }
 }
