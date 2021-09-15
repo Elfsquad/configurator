@@ -5,6 +5,7 @@ import { Layout3d } from '../models/Layout3d';
 import { Settings } from '../models/Settings';
 import { AuthenticationMethod, IConfiguratorOptions } from './IConfiguratorOptions';
 
+
 export class ConfiguratorContext extends EventTarget {
     public authenticationContext: AuthenticationContext;
     private configuration: Configuration;
@@ -103,7 +104,7 @@ export class ConfiguratorContext extends EventTarget {
     }
     
     public onUpdate(f: EventListener) {
-        this.addEventListener('onConfigurationUpdated', f);
+        this.addEventListener('onConfigurationUpdated', f as (evt: CustomEvent<Configuration>) => void)
     }
 
     private get(url:string): Promise<Response> {
@@ -145,6 +146,6 @@ export class ConfiguratorContext extends EventTarget {
 
     private async updateConfiguration(configuration: Configuration) {
         this.configuration = configuration;
-        this.dispatchEvent(new CustomEvent('onConfigurationUpdated', {'detail': configuration}));
+        this.dispatchEvent(new CustomEvent<Configuration>('onConfigurationUpdated', {'detail': configuration}));
     }
 }
