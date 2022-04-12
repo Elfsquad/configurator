@@ -2,6 +2,7 @@ import { AuthenticationContext } from '@elfsquad/authentication';
 import { Configuration } from '../models/Configuration';
 import { ConfigurationModels } from '../models/ConfigurationModels';
 import { Layout3d } from '../models/Layout3d';
+import {QuotationRequest} from '../models/QuotationRequest';
 import { Settings } from '../models/Settings';
 import { AuthenticationMethod, IConfiguratorOptions } from './IConfiguratorOptions';
 
@@ -103,12 +104,26 @@ export class ConfiguratorContext extends EventTarget {
         return await result.json() as Layout3d;
     }
     
-    public onUpdate(f: EventListener) {
+    public onUpdate(f: (evt: CustomEvent<Configuration>) => void) {
         this.addEventListener('onConfigurationUpdated', f as (evt: CustomEvent<Configuration>) => void)
+    }
+
+    public async requestQuote(quotationRequest: QuotationRequest) {
+      await this.post(`${this.options.apiUrl}/api/2/configurations/${this.configuration.id}/requestQuote`, quotationRequest);
     }
 
     private get(url:string): Promise<Response> {
         return this.fetchRequest(new Request(url));
+    }
+
+    private post(url: string, body: any): Promise<Response> {
+        return this.fetchRequest(new Request(url, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }));
     }
 
     private put(url:string, object: any): Promise<Response> {
