@@ -27,7 +27,7 @@
     "/dist"
   ],
   "dependencies": {
-    "@elfsquad/authentication": "1.0.8"
+    "@elfsquad/authentication": "1.0.12"
   },
   "devDependencies": {
     "@types/fetch-mock": "7.3.5",
