@@ -3,11 +3,13 @@ import {Mapped3dItems} from "./Configuration";
 export class Layout3d {
     configurationId: string;
     urn: string;
+    imageUrl: string;
     x: number;
     y: number;
     z: number;
     rotationY: number;
     mapped3dItems: Mapped3dItems;
+    name: string;
 }
 
 export class Material {

@@ -1,7 +1,9 @@
+import { ConfiguratorContext } from "../configurator/ConfiguratorContext";
 import { Material } from "./Layout3d";
 
 export class Configuration {
     id: string;
+    name: string;
     configurationModelId: string;
     root: ConfigurationFeature;
     linkedMachinesNode: ConfigurationFeature;
@@ -16,6 +18,8 @@ export class Configuration {
     additionalPriceExclVat: string;
     totalPriceExclVat: string;
     totalPriceInclVat: string;
+    totalPriceExclVatNumber: number;
+    totalPriceInclVatNumber: number;
     totalPrice: number;
     autodeskUrn: string;
     autodeskIntegrationApplicationId: string;
@@ -26,6 +30,60 @@ export class Configuration {
     linkedConfigurationModels: LinkedConfigurationModel[];
     linkedConfigurations: LinkedConfiguration[];
     requirements: ConfigurationRequirement[];
+
+
+    private _configuratorContext: ConfiguratorContext;
+
+    constructor(configuratorContext: ConfiguratorContext, data: object) {
+        this._configuratorContext = configuratorContext;
+        this._applyConfigurationObject(data);
+    }
+
+    public async updateRequirement(featureModelNodeId: string, isSelection: boolean, value: number, ignoreConflicts: boolean = false, includeSearchbarResults: boolean = false): Promise<void> {
+        let result = await this._configuratorContext._put(
+            `${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}?ignoreConflicts=${ignoreConflicts}&includeSearchbarResults=${includeSearchbarResults}`, {
+            featureModelNodeId,
+            isSelection,
+            value
+        });
+        this._applyConfigurationObject(await result.json());
+        await this._configuratorContext._updateConfiguration(this);
+    }
+
+    public async updateText(featureModelNodeId: string, textValue: string): Promise<void> {
+        let result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/text`, {
+            featureModelNodeId,
+            textValue
+        });
+        this._applyConfigurationObject(await result.json());
+        await this._configuratorContext._updateConfiguration(this);
+    }
+
+    public async changeLanguage(languageIso: string): Promise<void> {
+        let result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/changeLanguage`, languageIso);
+        this._applyConfigurationObject(await result.json());
+        await this._configuratorContext._updateConfiguration(this);
+    }
+
+    public async getStepImage(stepId: string, size: number = 1080, background: boolean = true): Promise<Blob>{
+        let result = await this._configuratorContext._get(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/image?stepId=${stepId}&size=${size}&background=${background}`);
+        return result.blob();
+    }
+
+    public async getPdf(): Promise<Blob>{
+        let result = await this._configuratorContext._get(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/pdf`);
+        return result.blob();
+    }
+
+    private _applyConfigurationObject(data): void {
+        if (this.conflicts) delete this.conflicts;
+        
+        for (let key in data) {
+            if (data.hasOwnProperty(key)) {
+                this[key] = data[key];
+            }
+        }
+    }
 }
 
 export class ConfigurationRequirement {
@@ -75,11 +133,21 @@ export class ConfigurationStep {
     title: string;
     type: StepType;
     features: ConfigurationFeature[];
+    iconUrl: string;
     mainCameraPosition: CameraPosition;
     cameraPositions: CameraPosition[];
-
+    configuratorImages: ConfiguratorImage[];
     thirdPartyUrl: string;
     sendDataOnConfigurationUpdate: boolean;
+}
+
+export class ConfiguratorImage {
+    z: number;
+    isHidden: boolean;
+    toggled: boolean;
+    url: string;
+    featureModelNodeIds: string[] = [];
+    stepId: string;
 }
 
 export class CameraPosition {
@@ -106,6 +174,7 @@ export class ConfigurationFeature {
     imageValue: string;
     isSelected: boolean;
     code: string;
+    name: string;
     description: string;
     extendedDescription: string;
     moreInfo: string;
@@ -127,6 +196,7 @@ export class ConfigurationFeature {
     featureType: FeatureType;
     minValue: number;
     maxValue: number;
+    stepValue: number;
 }
 
 export enum FeatureType {

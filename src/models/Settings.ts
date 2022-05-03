@@ -18,6 +18,8 @@ export class Settings {
     defaultLanguageIso: string;
     displayVat: boolean;
     logoUrl: string;
+    languages: Language[];
+	countries: Country[];
     selectedLanguageIso: string;
     mandatoryCrmValues: string;
     afterOrderText: string;
@@ -44,6 +46,7 @@ export class Settings {
     hideRemarksField: boolean;
     hideShippingAddressField: boolean;
     checkoutQuotationPropertyIds: string[];
+    onConfigurationLeavePopup: boolean;
 }
 
 export class WelcomePageText {
@@ -66,4 +69,21 @@ export class ShowroomFeatureModelSettings {
     featureModelId: string;
     allowedToSell: boolean;
     displayPrices: boolean;
+}
+
+
+export class Language{
+    public iso: string;
+    public name: string;
+    public active: boolean = true;
+    public englishName: string;
+}
+
+export class Country {
+    public iso: string;
+    public name: string;
+    public active: boolean;
+    public englishName: string;
+    public phonePrefix: string;
+    public capital: string;
 }

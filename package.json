@@ -1,6 +1,6 @@
 {
   "name": "@elfsquad/configurator",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "",
   "scripts": {
     "test": "jest",
@@ -27,13 +27,16 @@
     "/dist"
   ],
   "dependencies": {
-    "@elfsquad/authentication": "1.0.12"
+    "@elfsquad/authentication": "2.0.2"
   },
   "devDependencies": {
-    "@types/fetch-mock": "7.3.5",
-    "fetch-mock": "^9.11.0",
+    "@types/node-fetch": "^2.6.1",
+    "@types/jest": "27.4.1",
+    "jest-fetch-mock": "3.0.3",
+    "jest": "^27.1.4",
     "node-fetch": "^2.6.1",
     "nyc": "^15.1.0",
+    "ts-jest": "27.1.4",
     "ts-loader": "^9.2.5",
     "ts-node": "^10.1.0",
     "typescript": "^4.3.5",
