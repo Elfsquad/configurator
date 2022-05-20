@@ -2,6 +2,7 @@ import { AuthenticationContext } from '@elfsquad/authentication';
 import { Configuration } from '../models/Configuration';
 import { ConfigurationModels } from '../models/ConfigurationModels';
 import { Layout3d } from '../models/Layout3d';
+import { LinkedConfigurationOverview } from '../models/LinkedConfigurationOverview';
 import {QuotationRequest} from '../models/QuotationRequest';
 import { Settings } from '../models/Settings';
 import { AuthenticationMethod, IConfiguratorOptions } from './IConfiguratorOptions';
@@ -23,13 +24,19 @@ export class ConfiguratorContext extends EventTarget {
             return;
         }
 
-        if (_options.authenticationMethod != AuthenticationMethod.ANONYMOUS && !_options.authenticationOptions){
+        if (_options.authenticationMethod != AuthenticationMethod.ANONYMOUS && !(_options.authenticationOptions || _options.authenticationContext)){
             console.error('Authentication options are required if the authentication method is not set to ANONYMOUS.');
             return;
         }
 
         if (_options.authenticationMethod != AuthenticationMethod.ANONYMOUS){
-            this.authenticationContext = new AuthenticationContext(_options.authenticationOptions);
+            if (_options.authenticationContext){
+                this.authenticationContext = _options.authenticationContext;
+            }
+            else{
+                this.authenticationContext = new AuthenticationContext(_options.authenticationOptions);
+            }
+            
         }
 
         if (!_options.apiUrl){
@@ -72,8 +79,6 @@ export class ConfiguratorContext extends EventTarget {
         return configuration;
     }
 
-  
-
     public async getSettings(language: string = null): Promise<Settings> {
         if (language == null) language = this.rootConfiguration()?.language;
         let url = `${this._options.apiUrl}/configurator/1/configurator/settings`;
@@ -82,9 +87,15 @@ export class ConfiguratorContext extends EventTarget {
         return await result.json() as Settings;
     }
 
-    public async getLayout3d(): Promise<Layout3d>{
-        let result = await this._get(`${this._options.apiUrl}/configurator/1/configurator/${this.rootConfiguration().id}/3dlayout`);
-        return await result.json() as Layout3d;
+    public async getLayout3d(configurationId: string | null = null): Promise<Layout3d[]>{
+        if (!configurationId) configurationId = this.rootConfiguration().id;
+        let result = await this._get(`${this._options.apiUrl}/configurator/1/configurator/${configurationId}/3dlayout`);
+        return await result.json() as Layout3d[];
+    }
+
+    public async getLinkedConfigurationOverview() : Promise<LinkedConfigurationOverview>{
+        let result = await this._get(`${this._options.apiUrl}/configurator/1/configurator/${this.rootConfiguration().id}/linkedconfigurations/overview`);
+        return await result.json() as LinkedConfigurationOverview;
     }
     
     public onUpdate(f: (evt: CustomEvent<Configuration>) => void) {
@@ -101,7 +112,12 @@ export class ConfiguratorContext extends EventTarget {
 
     private rootConfiguration(): Configuration{
         if (this.configurations.length == 0) return null;
-        return this.configurations[0];
+
+        let childConfigurationIds = this.configurations
+            .map(c => c.linkedConfigurationModels.map(lc => lc.configurationModelId))
+            .flat();
+
+        return this.configurations.find(c => childConfigurationIds.indexOf(c.id) == -1);
     }
 
     private post(url: string, body: any): Promise<Response> {
