@@ -213,7 +213,9 @@ export enum FeatureModelRelationshipDisplayType {
     Mandatory,
     Searchbar,
     TableRow,
-    NonDialogSearchbar
+    NonDialogSearchbar,
+    Slider,
+    Input
 }
 
 export enum FeatureModelRelationshipTypes {
