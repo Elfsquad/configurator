@@ -1,6 +1,7 @@
 import { AuthenticationContext } from '@elfsquad/authentication';
 import { Configuration } from '../models/Configuration';
 import { ConfigurationModels } from '../models/ConfigurationModels';
+import { Layout2d } from '../models/Layout2d';
 import { Layout3d } from '../models/Layout3d';
 import { LinkedConfigurationOverview } from '../models/LinkedConfigurationOverview';
 import {QuotationRequest} from '../models/QuotationRequest';
@@ -85,6 +86,13 @@ export class ConfiguratorContext extends EventTarget {
         if (language) url += `?lang=${language}`;
         let result = await this._get(url);
         return await result.json() as Settings;
+    }
+
+    public async getLayout2d(configurationId: string | null = null, stepId: string): Promise<Layout2d[]> {
+      if (!configurationId) configurationId = this.rootConfiguration().id;
+      if (!stepId) stepId = this.rootConfiguration().steps[0].id;
+      const result = await this._get(`${this._options.apiUrl}/configurator/1/configurator/${configurationId}/2dlayout?stepId=${stepId}`);
+      return (await result.json()) as Layout2d[];
     }
 
     public async getLayout3d(configurationId: string | null = null): Promise<Layout3d[]>{
