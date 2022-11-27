@@ -12,13 +12,15 @@ The Elfsquad Configurator Library allows you to easily interact with the [Config
 * `getConfigurationModels` Retrieves a list of all available configuration models.
 * `newConfiguration` Starts a new configuration session.
 * `openConfiguration` Open an existing configuration.
-* `updateRequirement` Update the value of a feature in the configuration.
-* `updateText` Update the text value of a feature in the configuration.
+* `getLayout3d` Retrieves the 3D layout settings for the configuration session.
+* `getSettings` Retrieves the configurator settings.
+
+## Configurator methods
+* `updateRequirement` Update the value of a feature in the configuration session.
+* `updateText` Update the text value of a feature in the configuration session.
 * `changeLanguage` Changes the language of the texts in the configuration session.
 * `getStepImage` Retrieves the step image for a step in the configuration session.
 * `getPdf` Generates a PDF document for the configuration session.
-* `getLayout3d` Retrieves the 3D layout settings for the configuration session.
-* `getSettings` Retrieves the configurator settings.
 
 ## Examples
 ```javascript
@@ -45,23 +47,23 @@ configuratorContext.getConfigurationModels().then((models) => {
 
             const feature = openedConfiguration.steps[0].features[0];
             
-            configuratorContext.updateRequirement(feature.id, true, 1).then((updateResult) => {
+            configurator.updateRequirement(feature.id, true, 1).then((updateResult) => {
                 console.log('updateResult', updateResult);
             });
 
-            configuratorContext.updateText(feature.id, 'test 123').then((updateResult) => {
+            configurator.updateText(feature.id, 'test 123').then((updateResult) => {
                 console.log('updateTextResult', updateResult);
             });
 
-            configuratorContext.changeLanguage(Object.keys(models.languages)[2]).then((updateResult) => {
+            configurator.changeLanguage(Object.keys(models.languages)[2]).then((updateResult) => {
                 console.log('changeLanguage', updateResult);
             });
 
-            configuratorContext.getStepImage(openedConfiguration.steps[0].id).then((image) => {
+            configurator.getStepImage(openedConfiguration.steps[0].id).then((image) => {
                 console.log('image', image);
             });
 
-            configuratorContext.getPdf().then((pdf) => {
+            configurator.getPdf().then((pdf) => {
                 console.log('pdf', pdf);
             });
 
