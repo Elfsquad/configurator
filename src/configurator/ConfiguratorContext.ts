@@ -4,7 +4,8 @@ import { ConfigurationModels } from '../models/ConfigurationModels';
 import { Layout2d } from '../models/Layout2d';
 import { Layout3d } from '../models/Layout3d';
 import { LinkedConfigurationOverview } from '../models/LinkedConfigurationOverview';
-import {QuotationRequest} from '../models/QuotationRequest';
+import { OverviewGroups } from '../models/Overview';
+import { QuotationRequest } from '../models/QuotationRequest';
 import { Settings } from '../models/Settings';
 import { AuthenticationMethod, IConfiguratorOptions } from './IConfiguratorOptions';
 
@@ -104,6 +105,13 @@ export class ConfiguratorContext extends EventTarget {
     public async getLinkedConfigurationOverview() : Promise<LinkedConfigurationOverview>{
         let result = await this._get(`${this._options.apiUrl}/configurator/1/configurator/${this.rootConfiguration().id}/linkedconfigurations/overview`);
         return await result.json() as LinkedConfigurationOverview;
+    }
+    public async getOverview(configurationId: string | null = null): Promise<OverviewGroups[]> {
+        if (!configurationId) configurationId = this.rootConfiguration().id;
+        const result = await this._get(
+            `${this._options.apiUrl}/configurator/1/configurator/overview/multiple?configurationIds=${configurationId}`
+        );
+        return (await result.json()) as OverviewGroups[];
     }
     
     public onUpdate(f: (evt: CustomEvent<Configuration>) => void) {
