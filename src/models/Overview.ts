@@ -55,6 +55,7 @@ export class Overview {
   totalPrice: string;
 }
 
-export type OverviewGroups {
+export type OverviewGroups = {
+
   groups: Overview[];
 }
