@@ -59,6 +59,15 @@ export class Configuration {
         await this._configuratorContext._updateConfiguration(this);
     }
 
+    public async updateImage(featureModelNodeId: string, textValue: string): Promise<void> {
+        const result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/image`, {
+            featureModelNodeId,
+            textValue
+        });
+        this._applyConfigurationObject(await result.json());
+        await this._configuratorContext._updateConfiguration(this);
+    }
+  
     public async changeLanguage(languageIso: string): Promise<void> {
         let result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/changeLanguage`, languageIso);
         this._applyConfigurationObject(await result.json());
