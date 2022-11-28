@@ -42,10 +42,10 @@ configuratorContext.getConfigurationModels().then((models) => {
     configuratorContext.newConfiguration(model.name).then((configuration) => {
         console.log('newConfiguration', configuration);
 
-        configuratorContext.openConfiguration(configuration.id).then((openedConfiguration) => {
-            console.log('openedConfiguration', openedConfiguration);
+        configuratorContext.openConfiguration(configuration.id).then((configurator) => {
+            console.log('openedConfiguration', configurator);
 
-            const feature = openedConfiguration.steps[0].features[0];
+            const feature = configurator.steps[0].features[0];
             
             configurator.updateRequirement(feature.id, true, 1).then((updateResult) => {
                 console.log('updateResult', updateResult);
@@ -59,7 +59,7 @@ configuratorContext.getConfigurationModels().then((models) => {
                 console.log('changeLanguage', updateResult);
             });
 
-            configurator.getStepImage(openedConfiguration.steps[0].id).then((image) => {
+            configurator.getStepImage(configurator.steps[0].id).then((image) => {
                 console.log('image', image);
             });
 
