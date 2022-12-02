@@ -3,6 +3,7 @@ import {  AuthenticationContext, IAuthenticationOptions } from '@elfsquad/authen
 export interface IConfiguratorOptions {
     authenticationMethod?: AuthenticationMethod | undefined;
     tenantId?: string | undefined;
+    tenantDomain?: string | undefined;
     authenticationContext?: AuthenticationContext | undefined;
     authenticationOptions?: IAuthenticationOptions | undefined;
     apiUrl?: string | undefined;
