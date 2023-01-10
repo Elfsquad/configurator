@@ -7,6 +7,7 @@ export {
     FeatureType, FeatureModelRelationshipTypes, FeatureModelRelationshipDisplayType, Mapped3dItems ,
     StepType, ConfiguratorImage 
 } from './models/Configuration'
+export { Text, Line, VisibleSteps, Overview, OverviewGroups } from './models/Overview'
 export { Layout3d, MaterialType, Material } from './models/Layout3d'
 export { LinkedConfigurationOverview } from './models/LinkedConfigurationOverview'
 export { AfterOrderText, ShowroomFeatureModelSettings, WelcomePageText, Settings } from './models/Settings'

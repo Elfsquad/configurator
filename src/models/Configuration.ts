@@ -150,13 +150,27 @@ export class ConfigurationStep {
     sendDataOnConfigurationUpdate: boolean;
 }
 
+export enum ConfiguratorImageType {
+    Standard = 0,
+    Magnifier = 1,
+}
+  
 export class ConfiguratorImage {
+    id: string;
+    x: number;
+    y: number;
     z: number;
+    type: ConfiguratorImageType;
     isHidden: boolean;
     toggled: boolean;
     url: string;
     featureModelNodeIds: string[] = [];
     stepId: string;
+    creatorId: string;
+    synced: boolean;
+    inactive: boolean;
+    createdDate: string;
+    updatedDate: string;  
 }
 
 export class CameraPosition {
