@@ -26,6 +26,14 @@ export class ConfiguratorContext extends EventTarget {
             return;
         }
 
+        if (
+          _options.authenticationMethod != AuthenticationMethod.ANONYMOUS &&
+          _options.tenantDomain
+        ) {
+          console.error('TenantDomain is only allowed when the authentication method is ANONYMOUS.');
+          return;
+        }
+
         if (_options.authenticationMethod != AuthenticationMethod.ANONYMOUS && !(_options.authenticationOptions || _options.authenticationContext)){
             console.error('Authentication options are required if the authentication method is not set to ANONYMOUS.');
             return;
@@ -157,6 +165,9 @@ export class ConfiguratorContext extends EventTarget {
     private async fetchRequest(input: Request): Promise<Response> {
         if (await this.useElfsquadIdHeader()) {
             input.headers.append('x-elfsquad-id', this._options.tenantId);
+            if (this._options.tenantDomain) {
+              input.headers.append('x-elfsquad-domain', this._options.tenantDomain);
+            }
         }
         else {
             input.headers.append('authorization', `Bearer ${await this.authenticationContext.getAccessToken()}`);

@@ -42,28 +42,28 @@ configuratorContext.getConfigurationModels().then((models) => {
     configuratorContext.newConfiguration(model.name).then((configuration) => {
         console.log('newConfiguration', configuration);
 
-        configuratorContext.openConfiguration(configuration.id).then((configurator) => {
-            console.log('openedConfiguration', configurator);
+        configuratorContext.openConfiguration(configuration.id).then((configuration) => {
+            console.log('openedConfiguration', configuration);
 
-            const feature = configurator.steps[0].features[0];
+            const feature = configuration.steps[0].features[0];
             
-            configurator.updateRequirement(feature.id, true, 1).then((updateResult) => {
+            configuration.updateRequirement(feature.id, true, 1).then((updateResult) => {
                 console.log('updateResult', updateResult);
             });
 
-            configurator.updateText(feature.id, 'test 123').then((updateResult) => {
+            configuration.updateText(feature.id, 'test 123').then((updateResult) => {
                 console.log('updateTextResult', updateResult);
             });
 
-            configurator.changeLanguage(Object.keys(models.languages)[2]).then((updateResult) => {
+            configuration.changeLanguage(Object.keys(models.languages)[2]).then((updateResult) => {
                 console.log('changeLanguage', updateResult);
             });
 
-            configurator.getStepImage(configurator.steps[0].id).then((image) => {
+            configuration.getStepImage(configuration.steps[0].id).then((image) => {
                 console.log('image', image);
             });
 
-            configurator.getPdf().then((pdf) => {
+            configuration.getPdf().then((pdf) => {
                 console.log('pdf', pdf);
             });
 

@@ -150,13 +150,27 @@ export class ConfigurationStep {
     sendDataOnConfigurationUpdate: boolean;
 }
 
+export enum ConfiguratorImageType {
+    Standard = 0,
+    Magnifier = 1,
+}
+  
 export class ConfiguratorImage {
+    id: string;
+    x: number;
+    y: number;
     z: number;
+    type: ConfiguratorImageType;
     isHidden: boolean;
     toggled: boolean;
     url: string;
     featureModelNodeIds: string[] = [];
     stepId: string;
+    creatorId: string;
+    synced: boolean;
+    inactive: boolean;
+    createdDate: string;
+    updatedDate: string;  
 }
 
 export class CameraPosition {
@@ -176,18 +190,20 @@ export class ConfigurationFeature {
     configurationId: string;
     configurationModelId: string;
     featureId: string;
+    parentId?: string;
+    articleCode?: string;
     value: number;
     isDisabled: boolean;
     disabledReason: string;
-    textValue: string;
+    textValue?: string;
     imageValue: string;
     isSelected: boolean;
-    code: string;
+    code?: string;
     name: string;
     description: string;
-    extendedDescription: string;
-    moreInfo: string;
-    unitOfMeasurement: string;
+    extendedDescription?: string;
+    moreInfo?: string;
+    unitOfMeasurement?: string;
     imageUrl: string;
     type: FeatureModelRelationshipTypes;
     features: ConfigurationFeature[];
@@ -195,9 +211,12 @@ export class ConfigurationFeature {
     isMandatory: boolean;
     displayType: FeatureModelRelationshipDisplayType;
     hideInQuotation: boolean;
+    startingPriceExclVat?: string;
+    startingPriceInclVat?: string;
     unitPrice: string;
     unitPriceInclVat: string;
     totalPrice: string;
+    totalPriceExclVat: string;
     totalPriceInclVat: string;
     threeDModelItems: string[];
     hiddenThreeDModelItems: string[];
@@ -206,6 +225,7 @@ export class ConfigurationFeature {
     minValue: number;
     maxValue: number;
     stepValue: number;
+    reference?: string;
 }
 
 export enum FeatureType {
