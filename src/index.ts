@@ -5,7 +5,7 @@ export {
     ConflictType, ConfigurationConflict, Configuration, ConfigurationFeature, ConfigurationRequirement, 
     ConfigurationStep, ConfigurationValue, CameraPosition, LinkedConfiguration, LinkedConfigurationModel, 
     FeatureType, FeatureModelRelationshipTypes, FeatureModelRelationshipDisplayType, Mapped3dItems ,
-    StepType, ConfiguratorImage 
+    StepType, ConfiguratorImage, CustomProperties
 } from './models/Configuration'
 export { Text, Line, VisibleSteps, Overview, OverviewGroups } from './models/Overview'
 export { Layout3d, MaterialType, Material } from './models/Layout3d'
