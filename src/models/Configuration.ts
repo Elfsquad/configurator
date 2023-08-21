@@ -226,6 +226,7 @@ export class ConfigurationFeature {
     maxValue: number;
     stepValue: number;
     reference?: string;
+    customProperties: CustomProperties;
 }
 
 export enum FeatureType {
@@ -271,4 +272,8 @@ export enum ConflictType {
     Remove,
     Alternative,
     Value
+}
+
+export class CustomProperties {
+    [name: string]: string[] | number[];
 }
