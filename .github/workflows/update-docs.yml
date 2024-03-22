@@ -1,0 +1,40 @@
+name: Update docs
+on:
+  workflow_dispatch:
+
+jobs:
+  update-docs:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          path: 'configurator'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '20.x'
+      - name: Clone docs
+        run: |
+          cd $GITHUB_WORKSPACE/
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git clone https://x-access-token:${{ secrets.TOKEN }}@github.com/elfsquad/docs.git
+      - name: Update docs
+        run: |
+          npm i -g @elfsquad/tsdoc-parser
+          tsdoc-parser $GITHUB_WORKSPACE/configurator/src/configurator/ConfiguratorContext.ts configuratorContext.json ConfiguratorContext
+          tsdoc-parser $GITHUB_WORKSPACE/configurator/src/models/Configuration.ts configuration.json Configuration
+
+          file="$GITHUB_WORKSPACE/docs/docs/configurator/libraries/methods/configuratorContext.ts"
+          echo "export default $(cat configuratorContext.json)" > temp && mv temp $file
+
+          cd $GITHUB_WORKSPACE/docs
+          git checkout -b update-configurator-docs
+          git add .
+          git commit -m "Update documentation for @elfsquad/configurator"
+          git push --set-upstream origin update-configurator-docs -f
+          gh pr create --title "Update @elfsquad/configurator focumentation" \
+                       --body "This PR updates the documentation for the @elfsquad/configurator package based on the latest changes."
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN }}
+
