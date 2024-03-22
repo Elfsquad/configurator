@@ -39,6 +39,29 @@ export class Configuration {
         this._applyConfigurationObject(data);
     }
 
+    /**
+     * Updates a requirement on the this configuration. This can be used
+     * to (de)select a feature or set a value on a feature.
+     *
+     * @example
+     * ```typescript
+     * const nodeId = '00000000-0000-0000-0000-000000000000';
+     * const value = 1;
+     * const isSelection = true;
+     *
+     * await configuration.updateRequirement(nodeId, isSelection, value);
+     * ```
+     *
+     * @param featureModelNodeId The id of the feature model node to update
+     * @param isSelection Whether the feature should be selected or not
+     * @param value The value to set on the feature
+     * @param ignoreConflicts If ture, the API will try to automatically
+     * resolve conflicts.
+     * @param includeSearchbarResults If true, the API will include
+     * results in the display type searchbar.
+     *
+     * @returns A promise that resolves when the requirement has been updated
+    */
     public async updateRequirement(featureModelNodeId: string, isSelection: boolean, value: number, ignoreConflicts: boolean = false, includeSearchbarResults: boolean = false): Promise<void> {
         let result = await this._configuratorContext._put(
             `${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}?ignoreConflicts=${ignoreConflicts}&includeSearchbarResults=${includeSearchbarResults}`, {
@@ -50,6 +73,21 @@ export class Configuration {
         await this._configuratorContext._updateConfiguration(this);
     }
 
+    /**
+     * Updates the text value of a feature on this configuration.
+     *
+     * @example
+     * ```typescript
+     * const nodeId = '00000000-0000-0000-0000-000000000000';
+     * const textValue = 'Hello World';
+     * await configuration.updateText(nodeId, textValue);
+     * ```
+     *
+     * @param featureModelNodeId The id of the feature model node to update
+     * @param textValue The text value to set on the feature
+     *
+     * @returns A promise that resolves when the text value has been updated
+    */
     public async updateText(featureModelNodeId: string, textValue: string): Promise<void> {
         let result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/text`, {
             featureModelNodeId,
@@ -59,6 +97,21 @@ export class Configuration {
         await this._configuratorContext._updateConfiguration(this);
     }
 
+    /**
+     * Updates the image value of a feature on this configuration.
+     *
+     * @example
+     * ```typescript
+     * const nodeId = '00000000-0000-0000-0000-000000000000';
+     * const textValue = 'https://example.com/image.png';
+     * await configuration.updateImage(nodeId, textValue);
+     * ```
+     *
+     * @param featureModelNodeId The id of the feature model node to update
+     * @param textValue The image value to set on the feature
+     *
+     * @returns A promise that resolves when the image value has been updated
+    */
     public async updateImage(featureModelNodeId: string, textValue: string): Promise<void> {
         const result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/image`, {
             featureModelNodeId,
@@ -68,17 +121,59 @@ export class Configuration {
         await this._configuratorContext._updateConfiguration(this);
     }
   
+    /**
+     * Changes the language of this configuration.
+     *
+     * @example
+     * ```typescript
+     * const languageIso = 'en';
+     * await configuration.changeLanguage(languageIso);
+     * ```
+     *
+     * @param languageIso The ISO code of the language to change to
+     * @returns A promise that resolves when the language has been changed
+     * successfully
+    */
     public async changeLanguage(languageIso: string): Promise<void> {
         let result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/changeLanguage`, languageIso);
         this._applyConfigurationObject(await result.json());
         await this._configuratorContext._updateConfiguration(this);
     }
 
+    /**
+     * Retrieves a rendered image of a step in this configuration.
+     *
+     * @example
+     * ```typescript
+     * const stepId = '00000000-0000-0000-0000-000000000000';
+     * const size = 1080;
+     * const background = true;
+     * const image = await configuration.getStepImage(stepId, size, background);
+     * ```
+     *
+     * @param stepId The id of the step to render
+     * @param size The size of the image to render
+     * @param background Whether to render the background or not
+     *
+     * @deprecated use getLayout2d on the ConfiguratorContext instead
+     * @returns A promise that resolves with the rendered image
+    */
     public async getStepImage(stepId: string, size: number = 1080, background: boolean = true): Promise<Blob>{
         let result = await this._configuratorContext._get(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/image?stepId=${stepId}&size=${size}&background=${background}`);
         return result.blob();
     }
 
+    /**
+     * Retrieves the PDF document for this configuration.
+     *
+     * @example
+     * ```typescript
+     * const context = new ConfiguratorContext();
+     * const pdf = await configuration.getPdf();
+     * ```
+     *
+     * @returns A promise that resolves with the PDF document
+    */
     public async getPdf(): Promise<Blob>{
         let result = await this._configuratorContext._get(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/pdf`);
         return result.blob();
