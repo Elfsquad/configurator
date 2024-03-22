@@ -17,3 +17,15 @@ jobs:
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  updateDocs:
+    runs-on: ubuntu-20.04
+    if: success()
+    steps:
+      - name: Call update docs
+        env:
+          REPO: elfsquad/configurator
+          BRANCH: main
+          WORKFLOW_ID: 90731854
+        run: |
+          curl -fL --retry 3 -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.TOKEN }}" https://api.github.com/repos/${{ env.REPO }}/actions/workflows/${{ env.WORKFLOW_ID }}/dispatches -d '{"ref":"main", "inputs": {}}'
+
