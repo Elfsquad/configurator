@@ -120,6 +120,53 @@ export class Configuration {
         this._applyConfigurationObject(await result.json());
         await this._configuratorContext._updateConfiguration(this);
     }
+
+    /**
+     * Updates the name of this or a linked configuration.
+     *
+     * @example
+     * ```typescript
+     * const name = 'My new configuration name';
+     * await configuration.updateName(name);
+     * ```
+     *
+     * @param name The new name of the configuration
+     * @param linkedConfigurationId The id of the linked configuration to update
+     *
+     * @returns A promise that resolves when the name has been updated
+    */
+    public async updateName(name: string, linkedConfigurationId: string | null = null): Promise<void> {
+      const result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/updatename`, {
+        configurationId: linkedConfigurationId ?? this.id,
+        name
+      });
+      this._applyConfigurationObject(await result.json());
+      await this._configuratorContext._updateConfiguration(this);
+    }
+
+    /**
+     * Updates the cardinality of a linked configuration.
+     *
+     * @example
+     * ```typescript
+     * const parentNodeId = '00000000-0000-0000-0000-000000000000';
+     * const newCardinality = 2;
+     * await configuration.updateCardinality(parentNodeId, newCardinality);
+     * ```
+     *
+     * @param parentNodeId The id of the parent node of the linked configuration
+     * @param cardinality The new cardinality of the linked configuration
+     *
+     * @returns A promise that resolves when the cardinality has been updated
+    */
+    public async updateCardinality(parentNodeId: string, cardinality: number): Promise<void> {
+        const result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/updatelinkedconfigurationcardinality`, {
+          cardinality: cardinality,
+          parentNodeId: parentNodeId,
+        });
+        this._applyConfigurationObject(await result.json());
+        await this._configuratorContext._updateConfiguration(this);
+    }
   
     /**
      * Changes the language of this configuration.
