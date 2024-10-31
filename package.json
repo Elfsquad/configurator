@@ -1,6 +1,6 @@
 {
   "name": "@elfsquad/configurator",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "",
   "scripts": {
     "test": "jest",
@@ -27,7 +27,7 @@
     "/dist"
   ],
   "dependencies": {
-    "@elfsquad/authentication": "2.0.4"
+    "@elfsquad/authentication": "^2.0.10"
   },
   "devDependencies": {
     "@types/node-fetch": "^2.6.1",
