@@ -1,5 +1,5 @@
 
-export class Settings {
+export interface Settings {
     domain: string;
     requireLogin: boolean;
     primaryColor: string;
@@ -10,6 +10,7 @@ export class Settings {
     faviconUrl: string;
     enableWelcomePage: boolean;
     enableProductPage: boolean;
+    enableOverviewPage: boolean;
     enableMultipleConfigurations: boolean;
     productSelectionBackgroundUrl: string;
     welcomeBackgroundUrl: string;
@@ -19,8 +20,9 @@ export class Settings {
     displayVat: boolean;
     logoUrl: string;
     languages: Language[];
-	countries: Country[];
+    countries: Country[];
     selectedLanguageIso: string;
+    languageIsos: string[];
     mandatoryCrmValues: string;
     afterOrderText: string;
     quotationRequestRedirectUrl: string;
@@ -49,41 +51,45 @@ export class Settings {
     onConfigurationLeavePopup: boolean;
 }
 
-export class WelcomePageText {
-    public languageIso: string | undefined;
-    public value: string | undefined;
-    public settingsId: string | undefined;
-    public showroomSettingsId: string | undefined;
+export interface WelcomePageText {
+    languageIso: string | undefined;
+    value: string | undefined;
+    settingsId: string | undefined;
+    showroomSettingsId: string | undefined;
+    id: string | undefined;
+    creatorId: string | undefined;
+    synced: boolean | undefined;
+    inactive: boolean | undefined;
+    createdDate: string | undefined;
+    updatedDate: string | undefined;
 }
 
-export class AfterOrderText {
-    public languageIso: string | undefined;
-    public value: string | undefined;
-    public settingsId: string | undefined;
-    public showroomSettingsId: string | undefined;
+export interface AfterOrderText {
+    languageIso: string | undefined;
+    value: string | undefined;
+    settingsId: string | undefined;
+    showroomSettingsId: string | undefined;
 }
 
-export class ShowroomFeatureModelSettings {
-
+export interface ShowroomFeatureModelSettings {
     showroomSettingsId: string;
     featureModelId: string;
     allowedToSell: boolean;
     displayPrices: boolean;
 }
 
-
-export class Language{
-    public iso: string;
-    public name: string;
-    public active: boolean = true;
-    public englishName: string;
+export interface Language {
+    iso: string;
+    name: string;
+    active: boolean;
+    englishName: string;
 }
 
-export class Country {
-    public iso: string;
-    public name: string;
-    public active: boolean;
-    public englishName: string;
-    public phonePrefix: string;
-    public capital: string;
+export interface Country {
+    iso: string;
+    name: string;
+    active: boolean;
+    englishName: string;
+    phonePrefix: string;
+    capital: string;
 }

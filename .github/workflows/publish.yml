@@ -5,12 +5,12 @@ on:
 
 jobs:
   publish:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '12.x'
+          node-version: '22.x'
           registry-url: 'https://registry.npmjs.org'
       - run: npm install
       - run: npm run build
@@ -18,8 +18,8 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
   updateDocs:
-    runs-on: ubuntu-20.04
-    if: success()
+    runs-on: ubuntu-24.04
+    needs: publish
     steps:
       - name: Call update docs
         env:
@@ -28,4 +28,3 @@ jobs:
           WORKFLOW_ID: 90731854
         run: |
           curl -fL --retry 3 -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.TOKEN }}" https://api.github.com/repos/${{ env.REPO }}/actions/workflows/${{ env.WORKFLOW_ID }}/dispatches -d '{"ref":"main", "inputs": {}}'
-
