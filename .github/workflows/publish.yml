@@ -18,7 +18,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm install
       - run: npm run build
-      - run: npm publish
+      - run: npm install -g npm@latest
+      - run: npm publish --provenance --access public
   updateDocs:
     runs-on: ubuntu-24.04
     needs: publish
