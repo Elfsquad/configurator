@@ -1,19 +1,19 @@
 
-export class ConfigurationModels {
+export interface ConfigurationModels {
     categories: ConfigurationModelCategory[];
     features: ConfigurationModel[];
     languages: { [ iso:string ]: string };
     language: string;
 }
 
-export class ConfigurationModelCategory {
+export interface ConfigurationModelCategory {
     id: string;
     name: string;
     attachedFeatureIds: string[];
     subcategories: ConfigurationModelCategory[];
 }
 
-export class ConfigurationModel {
+export interface ConfigurationModel {
     featureModelId: string;
     featureId: string;
     articleCode: string;

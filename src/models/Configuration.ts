@@ -237,12 +237,12 @@ export class Configuration {
     }
 }
 
-export class ConfigurationRequirement {
+export interface ConfigurationRequirement {
     nodeId: string;
     value: number;
 }
 
-export class LinkedConfigurationModel {
+export interface LinkedConfigurationModel {
     parentNodeId: string;
     configurationModelId: string;
     configurationModelName: string;
@@ -250,7 +250,7 @@ export class LinkedConfigurationModel {
     allowMultiplier: boolean;
 }
 
-export class LinkedConfiguration {
+export interface LinkedConfiguration {
     id: string;
     configurationId: string;
     parentNodeId: string;
@@ -267,19 +267,19 @@ export class LinkedConfiguration {
     combinedInView: boolean;
 }
 
-export class ConfigurationValue {
+export interface ConfigurationValue {
     selected: boolean;
     value: number;
 }
 
-export class Mapped3dItems {
+export interface Mapped3dItems {
     visibleItems: string[];
     hiddenItems: string[];
     itemColors: { [nodeId: string]: number[] };
     itemMaterials: { [objectId: string]: Material };
 }
 
-export class ConfigurationStep {
+export interface ConfigurationStep {
     id: string;
     title: string;
     type: StepType;
@@ -296,8 +296,8 @@ export enum ConfiguratorImageType {
     Standard = 0,
     Magnifier = 1,
 }
-  
-export class ConfiguratorImage {
+
+export interface ConfiguratorImage {
     id: string;
     x: number;
     y: number;
@@ -306,16 +306,16 @@ export class ConfiguratorImage {
     isHidden: boolean;
     toggled: boolean;
     url: string;
-    featureModelNodeIds: string[] = [];
+    featureModelNodeIds: string[];
     stepId: string;
     creatorId: string;
     synced: boolean;
     inactive: boolean;
     createdDate: string;
-    updatedDate: string;  
+    updatedDate: string;
 }
 
-export class CameraPosition {
+export interface CameraPosition {
     featureModelNodeId: string;
     state: string;
 }
@@ -327,7 +327,7 @@ export enum StepType {
     ThirdParty = 7
 }
 
-export class ConfigurationFeature {
+export interface ConfigurationFeature {
     id: string;
     configurationId: string;
     configurationModelId: string;
@@ -400,7 +400,7 @@ export enum FeatureModelRelationshipTypes {
     Implies
 }
 
-export class ConfigurationConflict {
+export interface ConfigurationConflict {
     feature: ConfigurationFeature;
     alternativeOptions: ConfigurationFeature[];
     type: ConflictType;
@@ -416,6 +416,6 @@ export enum ConflictType {
     Value
 }
 
-export class CustomProperties {
+export interface CustomProperties {
     [name: string]: string[] | number[];
 }
