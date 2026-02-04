@@ -2,7 +2,6 @@ name: Publish to NPM
 on:
   release:
     types: [created]
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -21,7 +20,6 @@ jobs:
       - run: npm run build
       - run: npm publish
   updateDocs:
-    if: false
     runs-on: ubuntu-24.04
     needs: publish
     steps:
