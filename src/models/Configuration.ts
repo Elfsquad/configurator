@@ -40,7 +40,7 @@ export class Configuration {
     }
 
     /**
-     * Updates a requirement on the this configuration. This can be used
+     * Updates a requirement on this configuration. This can be used
      * to (de)select a feature or set a value on a feature.
      *
      * @example
