@@ -12,7 +12,7 @@ jobs:
           path: 'configurator'
       - uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '24.x'
       - name: Clone docs
         run: |
           cd $GITHUB_WORKSPACE/
