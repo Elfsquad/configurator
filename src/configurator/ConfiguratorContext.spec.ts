@@ -1,36 +1,31 @@
 import 'jest';
-import 'jest-fetch-mock'; // polyfills Request, Response, fetch for jsdom
+import fetchMock from 'jest-fetch-mock';
 import { ConfiguratorContext } from './ConfiguratorContext';
 
 describe('ConfiguratorContext', () => {
 
     const API_URL = `http://example.com`;
-    const originalFetch = global.fetch;
     let configuratorContext: ConfiguratorContext;
     let lastRequest: Request;
 
     function mockNextFetchResponse(body: any) {
-        const currentMock = global.fetch as jest.Mock;
-        currentMock.mockImplementationOnce(async (input: RequestInfo | URL) => {
-            lastRequest = input as Request;
-            return new Response(typeof body === 'string' ? body : JSON.stringify(body));
+        fetchMock.mockResponseOnce(async (req: Request) => {
+            lastRequest = req;
+            return typeof body === 'string' ? body : JSON.stringify(body);
         });
     }
 
     beforeEach(() => {
-        global.fetch = jest.fn(async (input: RequestInfo | URL) => {
-            lastRequest = input as Request;
-            return new Response('{}');
-        }) as any;
+        fetchMock.resetMocks();
+        fetchMock.mockResponse(async (req: Request) => {
+            lastRequest = req;
+            return JSON.stringify({});
+        });
 
         configuratorContext = new ConfiguratorContext({
             apiUrl: API_URL,
             tenantId: '<TENANT_ID>'
         });
-    });
-
-    afterAll(() => {
-        global.fetch = originalFetch;
     });
 
     it('should create an instance', () => {
