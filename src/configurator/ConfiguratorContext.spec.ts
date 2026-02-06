@@ -64,7 +64,7 @@ describe('ConfiguratorContext', () => {
 
         await configuratorContext.getConfigurationModels();
 
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/1/configurator/configurationmodels`);
+        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/configurationmodels`);
         expect(lastRequest.method).toBe('GET');
     });
 
@@ -73,7 +73,7 @@ describe('ConfiguratorContext', () => {
 
         await configuratorContext.getConfigurationModels('en');
 
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/1/configurator/configurationmodels?lang=en`);
+        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/configurationmodels?lang=en`);
         expect(lastRequest.method).toBe('GET');
     });
 
@@ -82,7 +82,7 @@ describe('ConfiguratorContext', () => {
 
         await configuratorContext.newConfiguration('test');
 
-        expect(lastRequest.url).toContain(`${API_URL}/configurator/1/configurator/new/test`);
+        expect(lastRequest.url).toContain(`${API_URL}/configurator/3/configurator/new/test`);
         expect(lastRequest.method).toBe('GET');
     });
 
@@ -91,7 +91,7 @@ describe('ConfiguratorContext', () => {
 
         await configuratorContext.openConfiguration('test-id');
 
-        expect(lastRequest.url).toContain(`${API_URL}/configurator/1/configurator/open/test-id`);
+        expect(lastRequest.url).toContain(`${API_URL}/configurator/3/configurator/open/test-id`);
         expect(lastRequest.method).toBe('GET');
     });
 
@@ -100,7 +100,7 @@ describe('ConfiguratorContext', () => {
 
         await configuratorContext.getSettings();
 
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/1/configurator/settings`);
+        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/settings`);
         expect(lastRequest.method).toBe('GET');
     });
 
@@ -111,7 +111,7 @@ describe('ConfiguratorContext', () => {
         mockNextFetchResponse([]);
         await configuratorContext.getLayout2d('cfg-id', 'step-1');
 
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/1/configurator/cfg-id/2dlayout?stepId=step-1`);
+        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/cfg-id/2dlayout?stepId=step-1`);
         expect(lastRequest.method).toBe('GET');
     });
 
@@ -122,7 +122,7 @@ describe('ConfiguratorContext', () => {
         mockNextFetchResponse([]);
         await configuratorContext.getLayout3d('cfg-id');
 
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/1/configurator/cfg-id/3dlayout`);
+        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/cfg-id/3dlayout`);
         expect(lastRequest.method).toBe('GET');
     });
 
@@ -133,7 +133,7 @@ describe('ConfiguratorContext', () => {
         mockNextFetchResponse({});
         await configuratorContext.getLinkedConfigurationOverview();
 
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/1/configurator/cfg-id/linkedconfigurations/overview`);
+        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/cfg-id/linkedconfigurations/overview`);
         expect(lastRequest.method).toBe('GET');
     });
 
@@ -144,7 +144,7 @@ describe('ConfiguratorContext', () => {
         mockNextFetchResponse([]);
         await configuratorContext.getOverview();
 
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/1/configurator/overview/multiple?configurationIds=cfg-id`);
+        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/overview/multiple?configurationIds=cfg-id`);
         expect(lastRequest.method).toBe('GET');
     });
 

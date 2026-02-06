@@ -88,7 +88,7 @@ export class ConfiguratorContext extends EventTarget {
      * @returns DTO containing the configuration models, categories & languages.
     */
     public async getConfigurationModels(languageIso?: string | undefined): Promise<ConfigurationModels> {
-        let url = `${this._options.apiUrl}/configurator/1/configurator/configurationmodels`;
+        let url = `${this._options.apiUrl}/configurator/3/configurator/configurationmodels`;
         if (languageIso){
             url += `?lang=${languageIso}`;
         }
@@ -127,7 +127,7 @@ export class ConfiguratorContext extends EventTarget {
             preview: preview?.toString(), 
             includeSearchbarResults: includeSearchbarResults?.toString()
         }).toString();
-        let result = await this._get(`${this._options.apiUrl}/configurator/1/configurator/new/${name}?${parameters}`);
+        let result = await this._get(`${this._options.apiUrl}/configurator/3/configurator/new/${name}?${parameters}`);
         
         const configuration = new Configuration(this, await result.json());
         this.configurations.push(configuration);
@@ -157,7 +157,7 @@ export class ConfiguratorContext extends EventTarget {
      * @returns The opened configuration.
     */
     public async openConfiguration(configurationId: string, includeSearchbarResults: boolean = false) : Promise<Configuration>{
-        let result = await this._get(`${this._options.apiUrl}/configurator/1/configurator/open/${configurationId}?includeSearchbarResults=${includeSearchbarResults}`);
+        let result = await this._get(`${this._options.apiUrl}/configurator/3/configurator/open/${configurationId}?includeSearchbarResults=${includeSearchbarResults}`);
         
         const configuration = new Configuration(this, await result.json());
         this.configurations.push(configuration);
@@ -182,7 +182,7 @@ export class ConfiguratorContext extends EventTarget {
     */
     public async getSettings(language: string = null): Promise<Settings> {
         if (language == null) language = this.rootConfiguration()?.language;
-        let url = `${this._options.apiUrl}/configurator/1/configurator/settings`;
+        let url = `${this._options.apiUrl}/configurator/3/configurator/settings`;
         if (language) url += `?lang=${language}`;
         let result = await this._get(url);
         return await result.json() as Settings;
@@ -210,7 +210,7 @@ export class ConfiguratorContext extends EventTarget {
     public async getLayout2d(configurationId: string | null = null, stepId: string): Promise<Layout2d[]> {
       if (!configurationId) configurationId = this.rootConfiguration().id;
       if (!stepId) stepId = this.rootConfiguration().steps[0].id;
-      const result = await this._get(`${this._options.apiUrl}/configurator/1/configurator/${configurationId}/2dlayout?stepId=${stepId}`);
+      const result = await this._get(`${this._options.apiUrl}/configurator/3/configurator/${configurationId}/2dlayout?stepId=${stepId}`);
       return (await result.json()) as Layout2d[];
     }
 
@@ -232,7 +232,7 @@ export class ConfiguratorContext extends EventTarget {
     */
     public async getLayout3d(configurationId: string | null = null): Promise<Layout3d[]>{
         if (!configurationId) configurationId = this.rootConfiguration().id;
-        let result = await this._get(`${this._options.apiUrl}/configurator/1/configurator/${configurationId}/3dlayout`);
+        let result = await this._get(`${this._options.apiUrl}/configurator/3/configurator/${configurationId}/3dlayout`);
         return await result.json() as Layout3d[];
     }
 
@@ -252,7 +252,7 @@ export class ConfiguratorContext extends EventTarget {
      * configuration.
     */
     public async getLinkedConfigurationOverview() : Promise<LinkedConfigurationOverview>{
-        let result = await this._get(`${this._options.apiUrl}/configurator/1/configurator/${this.rootConfiguration().id}/linkedconfigurations/overview`);
+        let result = await this._get(`${this._options.apiUrl}/configurator/3/configurator/${this.rootConfiguration().id}/linkedconfigurations/overview`);
         return await result.json() as LinkedConfigurationOverview;
     }
 
@@ -276,7 +276,7 @@ export class ConfiguratorContext extends EventTarget {
     public async getOverview(configurationId: string | null = null): Promise<OverviewGroups[]> {
         if (!configurationId) configurationId = this.rootConfiguration().id;
         const result = await this._get(
-            `${this._options.apiUrl}/configurator/1/configurator/overview/multiple?configurationIds=${configurationId}`
+            `${this._options.apiUrl}/configurator/3/configurator/overview/multiple?configurationIds=${configurationId}`
         );
         return (await result.json()) as OverviewGroups[];
     }

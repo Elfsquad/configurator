@@ -88,7 +88,7 @@ describe('configuration', () => {
         mockNextFetchResponse({ id: 'test-id' });
         await configuration.updateRequirement('node_id', true, 1);
 
-        expect(lastRequest.url).toContain(`${API_URL}/configurator/1/configurator/test-id?ignoreConflicts=`);
+        expect(lastRequest.url).toContain(`${API_URL}/configurator/3/configurator/test-id?ignoreConflicts=`);
         expect(lastRequest.method).toBe('PUT');
     });
 
@@ -98,7 +98,7 @@ describe('configuration', () => {
         mockNextFetchResponse({ id: 'test-id' });
         await configuration.updateText('node_id', 'abc');
 
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/1/configurator/test-id/text`);
+        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/test-id/text`);
         expect(lastRequest.method).toBe('PUT');
     });
 
@@ -108,7 +108,7 @@ describe('configuration', () => {
         mockNextFetchResponse({ id: 'test-id' });
         await configuration.updateImage('node_id', 'https://example.com/image.png');
 
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/1/configurator/test-id/image`);
+        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/test-id/image`);
         expect(lastRequest.method).toBe('PUT');
     });
 
@@ -118,7 +118,7 @@ describe('configuration', () => {
         mockNextFetchResponse({ id: 'test-id' });
         await configuration.updateName('new-name');
 
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/1/configurator/test-id/updatename`);
+        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/test-id/updatename`);
         expect(lastRequest.method).toBe('PUT');
     });
 
@@ -128,7 +128,7 @@ describe('configuration', () => {
         mockNextFetchResponse({ id: 'test-id' });
         await configuration.updateCardinality('parent-node-id', 2);
 
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/1/configurator/test-id/updatelinkedconfigurationcardinality`);
+        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/test-id/updatelinkedconfigurationcardinality`);
         expect(lastRequest.method).toBe('PUT');
     });
 
@@ -138,7 +138,7 @@ describe('configuration', () => {
         mockNextFetchResponse({ id: 'test-id' });
         await configuration.changeLanguage('nl');
 
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/1/configurator/test-id/changeLanguage`);
+        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/test-id/changeLanguage`);
         expect(lastRequest.method).toBe('PUT');
     });
 
@@ -148,7 +148,7 @@ describe('configuration', () => {
         mockNextFetchResponse('');
         await configuration.getStepImage('step-1');
 
-        expect(lastRequest.url).toContain(`${API_URL}/configurator/1/configurator/test-id/image?stepId=`);
+        expect(lastRequest.url).toContain(`${API_URL}/configurator/3/configurator/test-id/image?stepId=`);
         expect(lastRequest.method).toBe('GET');
     });
 
@@ -158,7 +158,7 @@ describe('configuration', () => {
         mockNextFetchResponse('');
         await configuration.getPdf();
 
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/1/configurator/test-id/pdf`);
+        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/test-id/pdf`);
         expect(lastRequest.method).toBe('GET');
     });
 });

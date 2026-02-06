@@ -64,7 +64,7 @@ export class Configuration {
     */
     public async updateRequirement(featureModelNodeId: string, isSelection: boolean, value: number, ignoreConflicts: boolean = false, includeSearchbarResults: boolean = false): Promise<void> {
         let result = await this._configuratorContext._put(
-            `${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}?ignoreConflicts=${ignoreConflicts}&includeSearchbarResults=${includeSearchbarResults}`, {
+            `${this._configuratorContext._options.apiUrl}/configurator/3/configurator/${this.id}?ignoreConflicts=${ignoreConflicts}&includeSearchbarResults=${includeSearchbarResults}`, {
             featureModelNodeId,
             isSelection,
             value
@@ -89,7 +89,7 @@ export class Configuration {
      * @returns A promise that resolves when the text value has been updated
     */
     public async updateText(featureModelNodeId: string, textValue: string): Promise<void> {
-        let result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/text`, {
+        let result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/3/configurator/${this.id}/text`, {
             featureModelNodeId,
             textValue
         });
@@ -113,7 +113,7 @@ export class Configuration {
      * @returns A promise that resolves when the image value has been updated
     */
     public async updateImage(featureModelNodeId: string, textValue: string): Promise<void> {
-        const result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/image`, {
+        const result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/3/configurator/${this.id}/image`, {
             featureModelNodeId,
             textValue
         });
@@ -136,7 +136,7 @@ export class Configuration {
      * @returns A promise that resolves when the name has been updated
     */
     public async updateName(name: string, linkedConfigurationId: string | null = null): Promise<void> {
-      const result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/updatename`, {
+      const result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/3/configurator/${this.id}/updatename`, {
         configurationId: linkedConfigurationId ?? this.id,
         name
       });
@@ -160,7 +160,7 @@ export class Configuration {
      * @returns A promise that resolves when the cardinality has been updated
     */
     public async updateCardinality(parentNodeId: string, cardinality: number): Promise<void> {
-        const result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/updatelinkedconfigurationcardinality`, {
+        const result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/3/configurator/${this.id}/updatelinkedconfigurationcardinality`, {
           cardinality: cardinality,
           parentNodeId: parentNodeId,
         });
@@ -182,7 +182,7 @@ export class Configuration {
      * successfully
     */
     public async changeLanguage(languageIso: string): Promise<void> {
-        let result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/changeLanguage`, languageIso);
+        let result = await this._configuratorContext._put(`${this._configuratorContext._options.apiUrl}/configurator/3/configurator/${this.id}/changeLanguage`, languageIso);
         this._applyConfigurationObject(await result.json());
         await this._configuratorContext._updateConfiguration(this);
     }
@@ -206,7 +206,7 @@ export class Configuration {
      * @returns A promise that resolves with the rendered image
     */
     public async getStepImage(stepId: string, size: number = 1080, background: boolean = true): Promise<Blob>{
-        let result = await this._configuratorContext._get(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/image?stepId=${stepId}&size=${size}&background=${background}`);
+        let result = await this._configuratorContext._get(`${this._configuratorContext._options.apiUrl}/configurator/3/configurator/${this.id}/image?stepId=${stepId}&size=${size}&background=${background}`);
         return result.blob();
     }
 
@@ -222,7 +222,7 @@ export class Configuration {
      * @returns A promise that resolves with the PDF document
     */
     public async getPdf(): Promise<Blob>{
-        let result = await this._configuratorContext._get(`${this._configuratorContext._options.apiUrl}/configurator/1/configurator/${this.id}/pdf`);
+        let result = await this._configuratorContext._get(`${this._configuratorContext._options.apiUrl}/configurator/3/configurator/${this.id}/pdf`);
         return result.blob();
     }
 
