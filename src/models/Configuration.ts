@@ -290,6 +290,7 @@ export interface ConfigurationStep {
     configuratorImages: ConfiguratorImage[];
     thirdPartyUrl: string;
     sendDataOnConfigurationUpdate: boolean;
+    configurationModelId: string;
 }
 
 export enum ConfiguratorImageType {
