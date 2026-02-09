@@ -6,7 +6,9 @@
     "test": "jest",
     "coverage": "jest --collectCoverage",
     "build": "webpack",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\""
   },
   "repository": {
     "type": "git",
@@ -30,16 +32,17 @@
     "@elfsquad/authentication": "^2.0.10"
   },
   "devDependencies": {
-    "@types/node-fetch": "^2.6.1",
     "@types/jest": "^29.5.14",
+    "@types/node-fetch": "^2.6.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jest-fetch-mock": "3.0.3",
     "node-fetch": "^2.6.1",
+    "prettier": "^3.8.1",
     "ts-jest": "^29.2.6",
     "ts-loader": "^9.2.5",
     "ts-node": "^10.1.0",
-    "typescript": "^5.7.0",
+    "typescript": "^5.9.3",
     "webpack": "^5.50.0",
     "webpack-cli": "^4.8.0"
   }

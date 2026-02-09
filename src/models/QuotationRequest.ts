@@ -32,4 +32,3 @@ export interface QuotationRequest {
   shipto_companyName?: string;
   remarks?: string;
 }
-

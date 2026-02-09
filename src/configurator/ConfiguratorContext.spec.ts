@@ -1,167 +1,182 @@
-import 'jest';
-import fetchMock from 'jest-fetch-mock';
-import { ConfiguratorContext } from './ConfiguratorContext';
+import "jest";
+import fetchMock from "jest-fetch-mock";
+import { ConfiguratorContext } from "./ConfiguratorContext";
 
-describe('ConfiguratorContext', () => {
+describe("ConfiguratorContext", () => {
+  const API_URL = `http://example.com`;
+  let configuratorContext: ConfiguratorContext;
+  let lastRequest: Request;
 
-    const API_URL = `http://example.com`;
-    let configuratorContext: ConfiguratorContext;
-    let lastRequest: Request;
+  function mockNextFetchResponse(body: any) {
+    fetchMock.mockResponseOnce(async (req: Request) => {
+      lastRequest = req;
+      return typeof body === "string" ? body : JSON.stringify(body);
+    });
+  }
 
-    function mockNextFetchResponse(body: any) {
-        fetchMock.mockResponseOnce(async (req: Request) => {
-            lastRequest = req;
-            return typeof body === 'string' ? body : JSON.stringify(body);
-        });
-    }
-
-    beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.mockResponse(async (req: Request) => {
-            lastRequest = req;
-            return JSON.stringify({});
-        });
-
-        configuratorContext = new ConfiguratorContext({
-            apiUrl: API_URL,
-            tenantId: '<TENANT_ID>'
-        });
+  beforeEach(() => {
+    fetchMock.resetMocks();
+    fetchMock.mockResponse(async (req: Request) => {
+      lastRequest = req;
+      return JSON.stringify({});
     });
 
-    it('should create an instance', () => {
-        expect(configuratorContext).toBeTruthy();
+    configuratorContext = new ConfiguratorContext({
+      apiUrl: API_URL,
+      tenantId: "<TENANT_ID>",
     });
+  });
 
-    it('should add new configurations to the configurations list', async () => {
-        mockNextFetchResponse({ id: 'test' });
+  it("should create an instance", () => {
+    expect(configuratorContext).toBeTruthy();
+  });
 
-        const configuration = await configuratorContext.newConfiguration('test');
+  it("should add new configurations to the configurations list", async () => {
+    mockNextFetchResponse({ id: "test" });
 
-        expect(configuratorContext.configurations.length).toBe(1);
-        expect(configuratorContext.configurations[0]).toEqual(configuration);
-        expect(configuration['_configuratorContext']).toBe(configuratorContext);
-        expect(configuration.id).toBe('test');
+    const configuration = await configuratorContext.newConfiguration("test");
+
+    expect(configuratorContext.configurations.length).toBe(1);
+    expect(configuratorContext.configurations[0]).toEqual(configuration);
+    expect(configuration["_configuratorContext"]).toBe(configuratorContext);
+    expect(configuration.id).toBe("test");
+  });
+
+  it("should add opened configurations to the configurations list", async () => {
+    mockNextFetchResponse({ id: "test" });
+
+    const configuration = await configuratorContext.openConfiguration("test");
+
+    expect(configuratorContext.configurations.length).toBe(1);
+    expect(configuratorContext.configurations[0]).toEqual(configuration);
+    expect(configuration["_configuratorContext"]).toBe(configuratorContext);
+    expect(configuration.id).toBe("test");
+  });
+
+  it("should call correct endpoint for getConfigurationModels", async () => {
+    mockNextFetchResponse({ features: [] });
+
+    await configuratorContext.getConfigurationModels();
+
+    expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/configurationmodels`);
+    expect(lastRequest.method).toBe("GET");
+  });
+
+  it("should call correct endpoint for getConfigurationModels with language", async () => {
+    mockNextFetchResponse({ features: [] });
+
+    await configuratorContext.getConfigurationModels("en");
+
+    expect(lastRequest.url).toBe(
+      `${API_URL}/configurator/3/configurator/configurationmodels?lang=en`
+    );
+    expect(lastRequest.method).toBe("GET");
+  });
+
+  it("should call correct endpoint for newConfiguration", async () => {
+    mockNextFetchResponse({ id: "test", linkedConfigurationModels: [] });
+
+    await configuratorContext.newConfiguration("test");
+
+    expect(lastRequest.url).toContain(`${API_URL}/configurator/3/configurator/new/test`);
+    expect(lastRequest.method).toBe("GET");
+  });
+
+  it("should call correct endpoint for openConfiguration", async () => {
+    mockNextFetchResponse({ id: "test-id", linkedConfigurationModels: [] });
+
+    await configuratorContext.openConfiguration("test-id");
+
+    expect(lastRequest.url).toContain(`${API_URL}/configurator/3/configurator/open/test-id`);
+    expect(lastRequest.method).toBe("GET");
+  });
+
+  it("should call correct endpoint for getSettings", async () => {
+    mockNextFetchResponse({});
+
+    await configuratorContext.getSettings();
+
+    expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/settings`);
+    expect(lastRequest.method).toBe("GET");
+  });
+
+  it("should call correct endpoint for getLayout2d", async () => {
+    mockNextFetchResponse({
+      id: "cfg-id",
+      linkedConfigurationModels: [],
+      steps: [{ id: "step-1" }],
     });
+    await configuratorContext.newConfiguration("test");
 
-    it('should add opened configurations to the configurations list', async () => {
-        mockNextFetchResponse({ id: 'test' });
+    mockNextFetchResponse([]);
+    await configuratorContext.getLayout2d("cfg-id", "step-1");
 
-        const configuration = await configuratorContext.openConfiguration('test');
+    expect(lastRequest.url).toBe(
+      `${API_URL}/configurator/3/configurator/cfg-id/2dlayout?stepId=step-1`
+    );
+    expect(lastRequest.method).toBe("GET");
+  });
 
-        expect(configuratorContext.configurations.length).toBe(1);
-        expect(configuratorContext.configurations[0]).toEqual(configuration);
-        expect(configuration['_configuratorContext']).toBe(configuratorContext);
-        expect(configuration.id).toBe('test');
-    });
+  it("should call correct endpoint for getLayout3d", async () => {
+    mockNextFetchResponse({ id: "cfg-id", linkedConfigurationModels: [] });
+    await configuratorContext.newConfiguration("test");
 
-    it('should call correct endpoint for getConfigurationModels', async () => {
-        mockNextFetchResponse({ features: [] });
+    mockNextFetchResponse([]);
+    await configuratorContext.getLayout3d("cfg-id");
 
-        await configuratorContext.getConfigurationModels();
+    expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/cfg-id/3dlayout`);
+    expect(lastRequest.method).toBe("GET");
+  });
 
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/configurationmodels`);
-        expect(lastRequest.method).toBe('GET');
-    });
+  it("should call correct endpoint for getLinkedConfigurationOverview", async () => {
+    mockNextFetchResponse({ id: "cfg-id", linkedConfigurationModels: [] });
+    await configuratorContext.newConfiguration("test");
 
-    it('should call correct endpoint for getConfigurationModels with language', async () => {
-        mockNextFetchResponse({ features: [] });
+    mockNextFetchResponse({});
+    await configuratorContext.getLinkedConfigurationOverview();
 
-        await configuratorContext.getConfigurationModels('en');
+    expect(lastRequest.url).toBe(
+      `${API_URL}/configurator/3/configurator/cfg-id/linkedconfigurations/overview`
+    );
+    expect(lastRequest.method).toBe("GET");
+  });
 
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/configurationmodels?lang=en`);
-        expect(lastRequest.method).toBe('GET');
-    });
+  it("should call correct endpoint for getOverview", async () => {
+    mockNextFetchResponse({ id: "cfg-id", linkedConfigurationModels: [] });
+    await configuratorContext.newConfiguration("test");
 
-    it('should call correct endpoint for newConfiguration', async () => {
-        mockNextFetchResponse({ id: 'test', linkedConfigurationModels: [] });
+    mockNextFetchResponse([]);
+    await configuratorContext.getOverview();
 
-        await configuratorContext.newConfiguration('test');
+    expect(lastRequest.url).toBe(
+      `${API_URL}/configurator/3/configurator/overview/multiple?configurationIds=cfg-id`
+    );
+    expect(lastRequest.method).toBe("GET");
+  });
 
-        expect(lastRequest.url).toContain(`${API_URL}/configurator/3/configurator/new/test`);
-        expect(lastRequest.method).toBe('GET');
-    });
+  it("should call correct endpoint for requestQuote", async () => {
+    mockNextFetchResponse({ id: "cfg-id", linkedConfigurationModels: [] });
+    await configuratorContext.newConfiguration("test");
 
-    it('should call correct endpoint for openConfiguration', async () => {
-        mockNextFetchResponse({ id: 'test-id', linkedConfigurationModels: [] });
+    mockNextFetchResponse({});
+    await configuratorContext.requestQuote({
+      firstName: "John",
+      lastName: "Doe",
+      email: "john@example.com",
+    } as any);
 
-        await configuratorContext.openConfiguration('test-id');
+    expect(lastRequest.url).toBe(`${API_URL}/api/2/configurations/cfg-id/requestQuote`);
+    expect(lastRequest.method).toBe("POST");
+  });
 
-        expect(lastRequest.url).toContain(`${API_URL}/configurator/3/configurator/open/test-id`);
-        expect(lastRequest.method).toBe('GET');
-    });
+  it("should call correct endpoint for addToQuotation", async () => {
+    mockNextFetchResponse({ id: "cfg-id", linkedConfigurationModels: [] });
+    await configuratorContext.newConfiguration("test");
 
-    it('should call correct endpoint for getSettings', async () => {
-        mockNextFetchResponse({});
+    mockNextFetchResponse({});
+    await configuratorContext.addToQuotation("quotation-id");
 
-        await configuratorContext.getSettings();
-
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/settings`);
-        expect(lastRequest.method).toBe('GET');
-    });
-
-    it('should call correct endpoint for getLayout2d', async () => {
-        mockNextFetchResponse({ id: 'cfg-id', linkedConfigurationModels: [], steps: [{ id: 'step-1' }] });
-        await configuratorContext.newConfiguration('test');
-
-        mockNextFetchResponse([]);
-        await configuratorContext.getLayout2d('cfg-id', 'step-1');
-
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/cfg-id/2dlayout?stepId=step-1`);
-        expect(lastRequest.method).toBe('GET');
-    });
-
-    it('should call correct endpoint for getLayout3d', async () => {
-        mockNextFetchResponse({ id: 'cfg-id', linkedConfigurationModels: [] });
-        await configuratorContext.newConfiguration('test');
-
-        mockNextFetchResponse([]);
-        await configuratorContext.getLayout3d('cfg-id');
-
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/cfg-id/3dlayout`);
-        expect(lastRequest.method).toBe('GET');
-    });
-
-    it('should call correct endpoint for getLinkedConfigurationOverview', async () => {
-        mockNextFetchResponse({ id: 'cfg-id', linkedConfigurationModels: [] });
-        await configuratorContext.newConfiguration('test');
-
-        mockNextFetchResponse({});
-        await configuratorContext.getLinkedConfigurationOverview();
-
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/cfg-id/linkedconfigurations/overview`);
-        expect(lastRequest.method).toBe('GET');
-    });
-
-    it('should call correct endpoint for getOverview', async () => {
-        mockNextFetchResponse({ id: 'cfg-id', linkedConfigurationModels: [] });
-        await configuratorContext.newConfiguration('test');
-
-        mockNextFetchResponse([]);
-        await configuratorContext.getOverview();
-
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/overview/multiple?configurationIds=cfg-id`);
-        expect(lastRequest.method).toBe('GET');
-    });
-
-    it('should call correct endpoint for requestQuote', async () => {
-        mockNextFetchResponse({ id: 'cfg-id', linkedConfigurationModels: [] });
-        await configuratorContext.newConfiguration('test');
-
-        mockNextFetchResponse({});
-        await configuratorContext.requestQuote({ firstName: 'John', lastName: 'Doe', email: 'john@example.com' } as any);
-
-        expect(lastRequest.url).toBe(`${API_URL}/api/2/configurations/cfg-id/requestQuote`);
-        expect(lastRequest.method).toBe('POST');
-    });
-
-    it('should call correct endpoint for addToQuotation', async () => {
-        mockNextFetchResponse({ id: 'cfg-id', linkedConfigurationModels: [] });
-        await configuratorContext.newConfiguration('test');
-
-        mockNextFetchResponse({});
-        await configuratorContext.addToQuotation('quotation-id');
-
-        expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/addtoquotation`);
-        expect(lastRequest.method).toBe('PUT');
-    });
+    expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/addtoquotation`);
+    expect(lastRequest.method).toBe("PUT");
+  });
 });

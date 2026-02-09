@@ -1,10 +1,9 @@
-
 export class LinkedConfigurationOverview {
-    configurations: LinkedConfigurationOverviewItem[];
+  configurations: LinkedConfigurationOverviewItem[];
 }
 
 export class LinkedConfigurationOverviewItem {
-    title: string;
-    imageUrl: string;
-    configurationId: string;
+  title: string;
+  imageUrl: string;
+  configurationId: string;
 }
