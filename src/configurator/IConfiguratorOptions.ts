@@ -44,8 +44,10 @@ export interface IConfiguratorOptions {
   apiUrl?: string | undefined;
 }
 
-export enum AuthenticationMethod {
-  ANONYMOUS,
-  USER_LOGIN,
-  ANONYMOUS_AND_USER_LOGIN,
-}
+export type AuthenticationMethod = (typeof AuthenticationMethod)[keyof typeof AuthenticationMethod];
+
+export const AuthenticationMethod = {
+  ANONYMOUS: 0,
+  USER_LOGIN: 1,
+  ANONYMOUS_AND_USER_LOGIN: 2,
+} as const;

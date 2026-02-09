@@ -8,7 +8,7 @@ describe("configuration", () => {
   let configuratorContext: ConfiguratorContext;
   let lastRequest: Request;
 
-  function mockNextFetchResponse(body: any) {
+  function mockNextFetchResponse(body: unknown) {
     fetchMock.mockResponseOnce(async (req: Request) => {
       lastRequest = req;
       return typeof body === "string" ? body : JSON.stringify(body);

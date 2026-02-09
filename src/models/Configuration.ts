@@ -68,8 +68,8 @@ export class Configuration {
     ignoreConflicts: boolean = false,
     includeSearchbarResults: boolean = false
   ): Promise<void> {
-    let result = await this._configuratorContext._put(
-      `${this._configuratorContext._options.apiUrl}/configurator/3/configurator/${this.id}?ignoreConflicts=${ignoreConflicts}&includeSearchbarResults=${includeSearchbarResults}`,
+    const result = await this._configuratorContext._put(
+      `${this._configuratorContext.options.apiUrl}/configurator/3/configurator/${this.id}?ignoreConflicts=${ignoreConflicts}&includeSearchbarResults=${includeSearchbarResults}`,
       {
         featureModelNodeId,
         isSelection,
@@ -96,8 +96,8 @@ export class Configuration {
    * @returns A promise that resolves when the text value has been updated
    */
   public async updateText(featureModelNodeId: string, textValue: string): Promise<void> {
-    let result = await this._configuratorContext._put(
-      `${this._configuratorContext._options.apiUrl}/configurator/3/configurator/${this.id}/text`,
+    const result = await this._configuratorContext._put(
+      `${this._configuratorContext.options.apiUrl}/configurator/3/configurator/${this.id}/text`,
       {
         featureModelNodeId,
         textValue,
@@ -124,7 +124,7 @@ export class Configuration {
    */
   public async updateImage(featureModelNodeId: string, textValue: string): Promise<void> {
     const result = await this._configuratorContext._put(
-      `${this._configuratorContext._options.apiUrl}/configurator/3/configurator/${this.id}/image`,
+      `${this._configuratorContext.options.apiUrl}/configurator/3/configurator/${this.id}/image`,
       {
         featureModelNodeId,
         textValue,
@@ -153,7 +153,7 @@ export class Configuration {
     linkedConfigurationId: string | null = null
   ): Promise<void> {
     const result = await this._configuratorContext._put(
-      `${this._configuratorContext._options.apiUrl}/configurator/3/configurator/${this.id}/updatename`,
+      `${this._configuratorContext.options.apiUrl}/configurator/3/configurator/${this.id}/updatename`,
       {
         configurationId: linkedConfigurationId ?? this.id,
         name,
@@ -180,7 +180,7 @@ export class Configuration {
    */
   public async updateCardinality(parentNodeId: string, cardinality: number): Promise<void> {
     const result = await this._configuratorContext._put(
-      `${this._configuratorContext._options.apiUrl}/configurator/3/configurator/${this.id}/updatelinkedconfigurationcardinality`,
+      `${this._configuratorContext.options.apiUrl}/configurator/3/configurator/${this.id}/updatelinkedconfigurationcardinality`,
       {
         cardinality: cardinality,
         parentNodeId: parentNodeId,
@@ -204,8 +204,8 @@ export class Configuration {
    * successfully
    */
   public async changeLanguage(languageIso: string): Promise<void> {
-    let result = await this._configuratorContext._put(
-      `${this._configuratorContext._options.apiUrl}/configurator/3/configurator/${this.id}/changeLanguage`,
+    const result = await this._configuratorContext._put(
+      `${this._configuratorContext.options.apiUrl}/configurator/3/configurator/${this.id}/changeLanguage`,
       languageIso
     );
     this._applyConfigurationObject(await result.json());
@@ -235,8 +235,8 @@ export class Configuration {
     size: number = 1080,
     background: boolean = true
   ): Promise<Blob> {
-    let result = await this._configuratorContext._get(
-      `${this._configuratorContext._options.apiUrl}/configurator/3/configurator/${this.id}/image?stepId=${stepId}&size=${size}&background=${background}`
+    const result = await this._configuratorContext._get(
+      `${this._configuratorContext.options.apiUrl}/configurator/3/configurator/${this.id}/image?stepId=${stepId}&size=${size}&background=${background}`
     );
     return result.blob();
   }
@@ -253,8 +253,8 @@ export class Configuration {
    * @returns A promise that resolves with the PDF document
    */
   public async getPdf(): Promise<Blob> {
-    let result = await this._configuratorContext._get(
-      `${this._configuratorContext._options.apiUrl}/configurator/3/configurator/${this.id}/pdf`
+    const result = await this._configuratorContext._get(
+      `${this._configuratorContext.options.apiUrl}/configurator/3/configurator/${this.id}/pdf`
     );
     return result.blob();
   }
@@ -262,7 +262,7 @@ export class Configuration {
   private _applyConfigurationObject(data): void {
     if (this.conflicts) delete this.conflicts;
 
-    for (let key in data) {
+    for (const key in data) {
       if (data.hasOwnProperty(key)) {
         this[key] = data[key];
       }
@@ -326,10 +326,13 @@ export interface ConfigurationStep {
   configurationModelId: string;
 }
 
-export enum ConfiguratorImageType {
-  Standard = 0,
-  Magnifier = 1,
-}
+export const ConfiguratorImageType = {
+  Standard: 0,
+  Magnifier: 1,
+} as const;
+
+export type ConfiguratorImageType =
+  (typeof ConfiguratorImageType)[keyof typeof ConfiguratorImageType];
 
 export interface ConfiguratorImage {
   id: string;
@@ -354,11 +357,17 @@ export interface CameraPosition {
   state: string;
 }
 
-export enum StepType {
-  Hotspots = 2,
-  ThreeD = 5,
-  ThirdParty = 7,
-}
+export const StepType = {
+  Welcome: 0,
+  ProductSelection: 1,
+  Hotspots: 2,
+  ListView: 3,
+  Overview: 4,
+  ThreeD: 5,
+  ThirdParty: 7,
+} as const;
+
+export type StepType = (typeof StepType)[keyof typeof StepType];
 
 export interface ConfigurationFeature {
   id: string;
@@ -404,34 +413,42 @@ export interface ConfigurationFeature {
   customProperties: CustomProperties;
 }
 
-export enum FeatureType {
-  Feature = 0,
-  ColorPicker = 2,
-  Text = 3,
-  Image = 4,
-}
+export const FeatureType = {
+  Feature: 0,
+  ColorPicker: 2,
+  Text: 3,
+  Image: 4,
+} as const;
 
-export enum FeatureModelRelationshipDisplayType {
-  Standard,
-  Card,
-  Dropdown,
-  Mandatory,
-  Searchbar,
-  TableRow,
-  NonDialogSearchbar,
-  Slider,
-  Input,
-}
+export type FeatureType = (typeof FeatureType)[keyof typeof FeatureType];
 
-export enum FeatureModelRelationshipTypes {
-  Optional = 0,
-  Mandatory,
-  Alternative,
-  Or,
-  Required,
-  Excludes,
-  Implies,
-}
+export const FeatureModelRelationshipDisplayType = {
+  Standard: 0,
+  Card: 1,
+  Dropdown: 2,
+  Mandatory: 3,
+  Searchbar: 4,
+  TableRow: 5,
+  NonDialogSearchbar: 6,
+  Slider: 7,
+  Input: 8,
+} as const;
+
+export type FeatureModelRelationshipDisplayType =
+  (typeof FeatureModelRelationshipDisplayType)[keyof typeof FeatureModelRelationshipDisplayType];
+
+export const FeatureModelRelationshipTypes = {
+  Optional: 0,
+  Mandatory: 1,
+  Alternative: 2,
+  Or: 3,
+  Required: 4,
+  Excludes: 5,
+  Implies: 6,
+} as const;
+
+export type FeatureModelRelationshipTypes =
+  (typeof FeatureModelRelationshipTypes)[keyof typeof FeatureModelRelationshipTypes];
 
 export interface ConfigurationConflict {
   feature: ConfigurationFeature;
@@ -441,12 +458,14 @@ export interface ConfigurationConflict {
   actualValue: number;
 }
 
-export enum ConflictType {
-  Add,
-  Remove,
-  Alternative,
-  Value,
-}
+export const ConflictType = {
+  Add: 0,
+  Remove: 1,
+  Alternative: 2,
+  Value: 3,
+} as const;
+
+export type ConflictType = (typeof ConflictType)[keyof typeof ConflictType];
 
 export interface CustomProperties {
   [name: string]: string[] | number[];
