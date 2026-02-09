@@ -27,10 +27,10 @@ export class Material {
   transparent = false;
   opacity = 1;
   fog = false;
-  lightMap?: string = undefined;
-  specularMap?: string = undefined;
-  normalMap?: string = undefined;
-  bumpMap?: string = undefined;
+  lightMap?: string;
+  specularMap?: string;
+  normalMap?: string;
+  bumpMap?: string;
   bumpScale = 1;
   shininess = 30;
   metal = false;
