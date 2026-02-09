@@ -1,8 +1,8 @@
-export class LinkedConfigurationOverview {
+export interface LinkedConfigurationOverview {
   configurations: LinkedConfigurationOverviewItem[];
 }
 
-export class LinkedConfigurationOverviewItem {
+export interface LinkedConfigurationOverviewItem {
   title: string;
   imageUrl: string;
   configurationId: string;

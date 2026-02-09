@@ -1,9 +1,11 @@
-export enum Layout2dType {
-  Standard = 0,
-  Magnifier = 1,
-}
+export const Layout2dType = {
+  Standard: 0,
+  Magnifier: 1,
+} as const;
 
-export class Layout2d {
+export type Layout2dType = (typeof Layout2dType)[keyof typeof Layout2dType];
+
+export interface Layout2d {
   id: string;
   stepId: string;
   x: number;

@@ -1,7 +1,7 @@
 import { ConfigurationFeature } from "./Configuration";
 import { Layout2d } from "./Layout2d";
 
-export class Text {
+export interface Text {
   value: string;
   languageIso: string;
   stepId: string;
@@ -14,11 +14,12 @@ export class Text {
   updatedDate: string;
 }
 
-export class Line {
+export interface Line {
   feature: ConfigurationFeature;
   depth: number;
 }
-export class VisibleSteps {
+
+export interface VisibleSteps {
   featureModelId?: string | number;
   type: number;
   texts: Text[];
@@ -43,7 +44,7 @@ export class VisibleSteps {
   updatedDate: string;
 }
 
-export class Overview {
+export interface Overview {
   configurationId: string;
   configurationCode: string;
   root: ConfigurationFeature;

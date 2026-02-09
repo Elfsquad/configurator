@@ -38,8 +38,11 @@ export class ConfiguratorContext extends EventTarget {
    * @param _options The options that are used to configure the context.
    * @throws An error if the options are invalid.
    */
-  constructor(public _options: IConfiguratorOptions) {
+  public options: IConfiguratorOptions;
+
+  constructor(_options: IConfiguratorOptions) {
     super();
+    this.options = _options;
     if (!_options.authenticationMethod) {
       _options.authenticationMethod = AuthenticationMethod.ANONYMOUS;
     }
@@ -67,7 +70,7 @@ export class ConfiguratorContext extends EventTarget {
       if (_options.authenticationContext) {
         this.authenticationContext = _options.authenticationContext;
       } else {
-        this.authenticationContext = new AuthenticationContext(_options.authenticationOptions);
+        this.authenticationContext = new AuthenticationContext(_options.authenticationOptions!);
       }
     }
 
@@ -95,12 +98,12 @@ export class ConfiguratorContext extends EventTarget {
   public async getConfigurationModels(
     languageIso?: string | undefined
   ): Promise<ConfigurationModels> {
-    let url = `${this._options.apiUrl}/configurator/3/configurator/configurationmodels`;
+    let url = `${this.options.apiUrl}/configurator/3/configurator/configurationmodels`;
     if (languageIso) {
       url += `?lang=${languageIso}`;
     }
 
-    let result = await this._get(url);
+    const result = await this._get(url);
     return (await result.json()) as ConfigurationModels;
   }
 
@@ -130,17 +133,17 @@ export class ConfiguratorContext extends EventTarget {
    */
   public async newConfiguration(
     name: string,
-    language: string = null,
+    language?: string,
     preview: boolean = false,
     includeSearchbarResults: boolean = false
   ): Promise<Configuration> {
-    let parameters = new URLSearchParams({
-      language,
+    const parameters = new URLSearchParams({
+      language: language ?? "",
       preview: preview?.toString(),
       includeSearchbarResults: includeSearchbarResults?.toString(),
     }).toString();
-    let result = await this._get(
-      `${this._options.apiUrl}/configurator/3/configurator/new/${name}?${parameters}`
+    const result = await this._get(
+      `${this.options.apiUrl}/configurator/3/configurator/new/${name}?${parameters}`
     );
 
     const configuration = new Configuration(this, await result.json());
@@ -174,8 +177,8 @@ export class ConfiguratorContext extends EventTarget {
     configurationId: string,
     includeSearchbarResults: boolean = false
   ): Promise<Configuration> {
-    let result = await this._get(
-      `${this._options.apiUrl}/configurator/3/configurator/open/${configurationId}?includeSearchbarResults=${includeSearchbarResults}`
+    const result = await this._get(
+      `${this.options.apiUrl}/configurator/3/configurator/open/${configurationId}?includeSearchbarResults=${includeSearchbarResults}`
     );
 
     const configuration = new Configuration(this, await result.json());
@@ -199,11 +202,11 @@ export class ConfiguratorContext extends EventTarget {
    * texts.
    * @returns The settings for the current showroom & user.
    */
-  public async getSettings(language: string = null): Promise<Settings> {
-    if (language == null) language = this.rootConfiguration()?.language;
-    let url = `${this._options.apiUrl}/configurator/3/configurator/settings`;
+  public async getSettings(language?: string): Promise<Settings> {
+    if (!language) language = this.rootConfiguration()?.language;
+    let url = `${this.options.apiUrl}/configurator/3/configurator/settings`;
     if (language) url += `?lang=${language}`;
-    let result = await this._get(url);
+    const result = await this._get(url);
     return (await result.json()) as Settings;
   }
 
@@ -230,10 +233,10 @@ export class ConfiguratorContext extends EventTarget {
     configurationId: string | null = null,
     stepId: string
   ): Promise<Layout2d[]> {
-    if (!configurationId) configurationId = this.rootConfiguration().id;
-    if (!stepId) stepId = this.rootConfiguration().steps[0].id;
+    if (!configurationId) configurationId = this.rootConfiguration()!.id;
+    if (!stepId) stepId = this.rootConfiguration()!.steps[0].id;
     const result = await this._get(
-      `${this._options.apiUrl}/configurator/3/configurator/${configurationId}/2dlayout?stepId=${stepId}`
+      `${this.options.apiUrl}/configurator/3/configurator/${configurationId}/2dlayout?stepId=${stepId}`
     );
     return (await result.json()) as Layout2d[];
   }
@@ -255,9 +258,9 @@ export class ConfiguratorContext extends EventTarget {
    * @returns The 3D layout for the configuration.
    */
   public async getLayout3d(configurationId: string | null = null): Promise<Layout3d[]> {
-    if (!configurationId) configurationId = this.rootConfiguration().id;
-    let result = await this._get(
-      `${this._options.apiUrl}/configurator/3/configurator/${configurationId}/3dlayout`
+    if (!configurationId) configurationId = this.rootConfiguration()!.id;
+    const result = await this._get(
+      `${this.options.apiUrl}/configurator/3/configurator/${configurationId}/3dlayout`
     );
     return (await result.json()) as Layout3d[];
   }
@@ -278,8 +281,8 @@ export class ConfiguratorContext extends EventTarget {
    * configuration.
    */
   public async getLinkedConfigurationOverview(): Promise<LinkedConfigurationOverview> {
-    let result = await this._get(
-      `${this._options.apiUrl}/configurator/3/configurator/${this.rootConfiguration().id}/linkedconfigurations/overview`
+    const result = await this._get(
+      `${this.options.apiUrl}/configurator/3/configurator/${this.rootConfiguration()!.id}/linkedconfigurations/overview`
     );
     return (await result.json()) as LinkedConfigurationOverview;
   }
@@ -302,9 +305,9 @@ export class ConfiguratorContext extends EventTarget {
    * @returns The overview for the configuration.
    */
   public async getOverview(configurationId: string | null = null): Promise<OverviewGroups[]> {
-    if (!configurationId) configurationId = this.rootConfiguration().id;
+    if (!configurationId) configurationId = this.rootConfiguration()!.id;
     const result = await this._get(
-      `${this._options.apiUrl}/configurator/3/configurator/overview/multiple?configurationIds=${configurationId}`
+      `${this.options.apiUrl}/configurator/3/configurator/overview/multiple?configurationIds=${configurationId}`
     );
     return (await result.json()) as OverviewGroups[];
   }
@@ -327,7 +330,7 @@ export class ConfiguratorContext extends EventTarget {
    * @param f The callback function that will be registered.
    */
   public onUpdate(f: (evt: CustomEvent<Configuration>) => void) {
-    this.addEventListener("onConfigurationUpdated", f as (evt: CustomEvent<Configuration>) => void);
+    this.addEventListener("onConfigurationUpdated", f as EventListener);
   }
 
   /**
@@ -349,7 +352,7 @@ export class ConfiguratorContext extends EventTarget {
    */
   public async requestQuote(quotationRequest: QuotationRequest) {
     await this.post(
-      `${this._options.apiUrl}/api/2/configurations/${this.rootConfiguration().id}/requestQuote`,
+      `${this.options.apiUrl}/api/2/configurations/${this.rootConfiguration()!.id}/requestQuote`,
       quotationRequest
     );
   }
@@ -370,9 +373,9 @@ export class ConfiguratorContext extends EventTarget {
    * @param configurationIds The configuration ids. If not provided,
    * the root configuration id will be used.
    */
-  public async addToQuotation(quotationId: string, configurationIds: string[] = null) {
-    if (!configurationIds) configurationIds = [this.rootConfiguration().id];
-    await this._put(`${this._options.apiUrl}/configurator/3/configurator/addtoquotation`, {
+  public async addToQuotation(quotationId: string, configurationIds?: string[]) {
+    if (!configurationIds) configurationIds = [this.rootConfiguration()!.id];
+    await this._put(`${this.options.apiUrl}/configurator/3/configurator/addtoquotation`, {
       configurationIds,
       quotationId,
     });
@@ -382,17 +385,17 @@ export class ConfiguratorContext extends EventTarget {
     return this.fetchRequest(new Request(url));
   }
 
-  private rootConfiguration(): Configuration {
-    if (this.configurations.length == 0) return null;
+  private rootConfiguration(): Configuration | undefined {
+    if (this.configurations.length == 0) return undefined;
 
-    let childConfigurationIds = this.configurations
+    const childConfigurationIds = this.configurations
       .map((c) => c.linkedConfigurationModels.map((lc) => lc.configurationModelId))
       .flat();
 
     return this.configurations.find((c) => childConfigurationIds.indexOf(c.id) == -1);
   }
 
-  private post(url: string, body: any): Promise<Response> {
+  private post(url: string, body: unknown): Promise<Response> {
     return this.fetchRequest(
       new Request(url, {
         method: "POST",
@@ -404,7 +407,7 @@ export class ConfiguratorContext extends EventTarget {
     );
   }
 
-  public _put(url: string, object: any): Promise<Response> {
+  public _put(url: string, object: unknown): Promise<Response> {
     return this.fetchRequest(
       new Request(url, {
         method: "PUT",
@@ -415,12 +418,12 @@ export class ConfiguratorContext extends EventTarget {
   }
 
   private async fetchRequest(input: Request): Promise<Response> {
-    if (this._options.tenantDomain) {
-      input.headers.append("x-elfsquad-domain", this._options.tenantDomain);
+    if (this.options.tenantDomain) {
+      input.headers.append("x-elfsquad-domain", this.options.tenantDomain);
     }
 
     if (await this.useElfsquadIdHeader()) {
-      input.headers.append("x-elfsquad-id", this._options.tenantId);
+      input.headers.append("x-elfsquad-id", this.options.tenantId!);
     } else {
       input.headers.append(
         "authorization",
@@ -432,17 +435,19 @@ export class ConfiguratorContext extends EventTarget {
   }
 
   private async useElfsquadIdHeader(): Promise<boolean> {
-    if (this._options.authenticationMethod == AuthenticationMethod.ANONYMOUS) {
+    if (this.options.authenticationMethod == AuthenticationMethod.ANONYMOUS) {
       return true;
     }
 
-    if (this._options.authenticationMethod == AuthenticationMethod.USER_LOGIN) {
+    if (this.options.authenticationMethod == AuthenticationMethod.USER_LOGIN) {
       return false;
     }
 
-    if (this._options.authenticationMethod == AuthenticationMethod.ANONYMOUS_AND_USER_LOGIN) {
+    if (this.options.authenticationMethod == AuthenticationMethod.ANONYMOUS_AND_USER_LOGIN) {
       return !(await this.authenticationContext.isSignedIn());
     }
+
+    return false;
   }
 
   public async _updateConfiguration(configuration: Configuration) {

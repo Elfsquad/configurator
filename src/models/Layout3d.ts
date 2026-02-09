@@ -1,6 +1,6 @@
 import { Mapped3dItems } from "./Configuration";
 
-export class Layout3d {
+export interface Layout3d {
   configurationId: string;
   urn: string;
   imageUrl: string;
@@ -20,17 +20,17 @@ export class Material {
   emissive = "#000000";
   specular = "#111111";
   wireframe = false;
-  map: string = undefined;
-  envMap: string = undefined;
+  map?: string = undefined;
+  envMap?: string = undefined;
   alphaTest = 0;
   side = 0;
   transparent = false;
   opacity = 1;
   fog = false;
-  lightMap: string = undefined;
-  specularMap: string = undefined;
-  normalMap: string = undefined;
-  bumpMap: string = undefined;
+  lightMap?: string;
+  specularMap?: string;
+  normalMap?: string;
+  bumpMap?: string;
   bumpScale = 1;
   shininess = 30;
   metal = false;
@@ -43,11 +43,13 @@ export class Material {
   textureRepeatX = 1;
   textureRepeatY = 1;
   textureFlipY = false;
-  previewImageUrl: string;
+  previewImageUrl?: string;
 }
 
-export enum MaterialType {
-  normal,
-  lambert,
-  phong,
-}
+export const MaterialType = {
+  normal: 0,
+  lambert: 1,
+  phong: 2,
+} as const;
+
+export type MaterialType = (typeof MaterialType)[keyof typeof MaterialType];

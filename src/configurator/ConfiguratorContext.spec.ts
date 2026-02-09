@@ -1,13 +1,14 @@
 import "jest";
 import fetchMock from "jest-fetch-mock";
 import { ConfiguratorContext } from "./ConfiguratorContext";
+import { QuotationRequest } from "../models/QuotationRequest";
 
 describe("ConfiguratorContext", () => {
   const API_URL = `http://example.com`;
   let configuratorContext: ConfiguratorContext;
   let lastRequest: Request;
 
-  function mockNextFetchResponse(body: any) {
+  function mockNextFetchResponse(body: unknown) {
     fetchMock.mockResponseOnce(async (req: Request) => {
       lastRequest = req;
       return typeof body === "string" ? body : JSON.stringify(body);
@@ -163,7 +164,7 @@ describe("ConfiguratorContext", () => {
       firstName: "John",
       lastName: "Doe",
       email: "john@example.com",
-    } as any);
+    } as QuotationRequest);
 
     expect(lastRequest.url).toBe(`${API_URL}/api/2/configurations/cfg-id/requestQuote`);
     expect(lastRequest.method).toBe("POST");
