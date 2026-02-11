@@ -51,9 +51,9 @@ export class ConfiguratorContext extends EventTarget {
     if (
       (_options.authenticationMethod == AuthenticationMethod.ANONYMOUS ||
         _options.authenticationMethod == AuthenticationMethod.ANONYMOUS_AND_USER_LOGIN) &&
-      !_options.tenantId
+      !_options.tenantId && !_options.tenantDomain
     ) {
-      console.error("TenantId is required when the authentication method is ANONYMOUS.");
+      console.error("TenantId or tenantDomain is required when the authentication method is ANONYMOUS.");
       return;
     }
 
@@ -204,6 +204,7 @@ export class ConfiguratorContext extends EventTarget {
    * @returns The settings for the current showroom & user.
    */
   public async getSettings(language?: string): Promise<Settings> {
+    console.log('here I am');
     if (!language) language = this.rootConfiguration()?.language;
     let url = `${this.options.apiUrl}/configurator/3/configurator/settings`;
     if (language) url += `?lang=${language}`;
@@ -424,7 +425,9 @@ export class ConfiguratorContext extends EventTarget {
     }
 
     if (await this.useElfsquadIdHeader()) {
-      input.headers.append("x-elfsquad-id", this.options.tenantId!);
+      if (this.options.tenantId) {
+        input.headers.append("x-elfsquad-id", this.options.tenantId);
+      }
     } else {
       input.headers.append(
         "authorization",

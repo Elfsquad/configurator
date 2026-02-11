@@ -189,6 +189,34 @@ describe("ConfiguratorContext", () => {
     expect(lastRequest.method).toBe("PUT");
   });
 
+  describe("anonymous auth with tenantDomain only", () => {
+    it("should not log an error when created with only tenantDomain", () => {
+      const consoleSpy = jest.spyOn(console, "error").mockImplementation();
+
+      const ctx = new ConfiguratorContext({
+        apiUrl: API_URL,
+        tenantDomain: "test.example.com",
+      });
+
+      expect(ctx).toBeTruthy();
+      expect(consoleSpy).not.toHaveBeenCalled();
+      consoleSpy.mockRestore();
+    });
+
+    it("should include x-elfsquad-domain but not x-elfsquad-id in requests", async () => {
+      const ctx = new ConfiguratorContext({
+        apiUrl: API_URL,
+        tenantDomain: "test.example.com",
+      });
+
+      mockNextFetchResponse({});
+      await ctx.getSettings();
+
+      expect(lastRequest.headers.get("x-elfsquad-domain")).toBe("test.example.com");
+      expect(lastRequest.headers.get("x-elfsquad-id")).toBeNull();
+    });
+  });
+
   describe("HTTP error handling", () => {
     it("should throw ConfiguratorHttpError on non-ok response with JSON body", async () => {
       mockNextFetchErrorResponse(401, JSON.stringify({ error: "Unauthorized" }));
