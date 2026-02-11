@@ -1,6 +1,7 @@
 import "jest";
 import fetchMock from "jest-fetch-mock";
 import { ConfiguratorContext } from "./ConfiguratorContext";
+import { ConfiguratorHttpError } from "./ConfiguratorHttpError";
 import { QuotationRequest } from "../models/QuotationRequest";
 
 describe("ConfiguratorContext", () => {
@@ -12,6 +13,13 @@ describe("ConfiguratorContext", () => {
     fetchMock.mockResponseOnce(async (req: Request) => {
       lastRequest = req;
       return typeof body === "string" ? body : JSON.stringify(body);
+    });
+  }
+
+  function mockNextFetchErrorResponse(status: number, body: string) {
+    fetchMock.mockResponseOnce(async (req: Request) => {
+      lastRequest = req;
+      return { body, status, headers: { "Content-Type": "application/json" } };
     });
   }
 
@@ -179,5 +187,69 @@ describe("ConfiguratorContext", () => {
 
     expect(lastRequest.url).toBe(`${API_URL}/configurator/3/configurator/addtoquotation`);
     expect(lastRequest.method).toBe("PUT");
+  });
+
+  describe("anonymous auth with tenantDomain only", () => {
+    it("should not log an error when created with only tenantDomain", () => {
+      const consoleSpy = jest.spyOn(console, "error").mockImplementation();
+
+      const ctx = new ConfiguratorContext({
+        apiUrl: API_URL,
+        tenantDomain: "test.example.com",
+      });
+
+      expect(ctx).toBeTruthy();
+      expect(consoleSpy).not.toHaveBeenCalled();
+      consoleSpy.mockRestore();
+    });
+
+    it("should include x-elfsquad-domain but not x-elfsquad-id in requests", async () => {
+      const ctx = new ConfiguratorContext({
+        apiUrl: API_URL,
+        tenantDomain: "test.example.com",
+      });
+
+      mockNextFetchResponse({});
+      await ctx.getSettings();
+
+      expect(lastRequest.headers.get("x-elfsquad-domain")).toBe("test.example.com");
+      expect(lastRequest.headers.get("x-elfsquad-id")).toBeNull();
+    });
+  });
+
+  describe("HTTP error handling", () => {
+    it("should throw ConfiguratorHttpError on non-ok response with JSON body", async () => {
+      mockNextFetchErrorResponse(401, JSON.stringify({ error: "Unauthorized" }));
+
+      const error = await configuratorContext.getSettings().catch((e) => e);
+      expect(error).toBeInstanceOf(ConfiguratorHttpError);
+      expect(error.status).toBe(401);
+      expect(error.body).toEqual({ error: "Unauthorized" });
+    });
+
+    it("should throw ConfiguratorHttpError with null body when response is not JSON", async () => {
+      mockNextFetchErrorResponse(500, "Internal Server Error");
+
+      const error = await configuratorContext.getSettings().catch((e) => e);
+      expect(error).toBeInstanceOf(ConfiguratorHttpError);
+      expect(error.status).toBe(500);
+      expect(error.body).toBeNull();
+    });
+
+    it("should throw ConfiguratorHttpError with status 0 on network failure", async () => {
+      fetchMock.mockRejectOnce(new TypeError("Failed to fetch"));
+
+      const error = await configuratorContext.getSettings().catch((e) => e);
+      expect(error).toBeInstanceOf(ConfiguratorHttpError);
+      expect(error.status).toBe(0);
+      expect(error.statusText).toBe("Failed to fetch");
+      expect(error.body).toBeNull();
+    });
+
+    it("should not throw on successful response", async () => {
+      mockNextFetchResponse({ setting: "value" });
+
+      await expect(configuratorContext.getSettings()).resolves.toBeDefined();
+    });
   });
 });
