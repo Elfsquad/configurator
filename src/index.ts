@@ -1,4 +1,5 @@
 export { ConfiguratorContext } from "./configurator/ConfiguratorContext";
+export { ConfiguratorHttpError } from "./configurator/ConfiguratorHttpError";
 export { IConfiguratorOptions, AuthenticationMethod } from "./configurator/IConfiguratorOptions";
 export {
   ConfigurationModels,

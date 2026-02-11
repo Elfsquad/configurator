@@ -7,6 +7,7 @@ import { LinkedConfigurationOverview } from "../models/LinkedConfigurationOvervi
 import { OverviewGroups } from "../models/Overview";
 import { QuotationRequest } from "../models/QuotationRequest";
 import { Settings } from "../models/Settings";
+import { ConfiguratorHttpError } from "./ConfiguratorHttpError";
 import { AuthenticationMethod, IConfiguratorOptions } from "./IConfiguratorOptions";
 
 export class ConfiguratorContext extends EventTarget {
@@ -431,7 +432,18 @@ export class ConfiguratorContext extends EventTarget {
       );
     }
 
-    return fetch(input);
+    let response: Response;
+    try {
+      response = await fetch(input);
+    } catch (e) {
+      throw new ConfiguratorHttpError(0, e instanceof Error ? e.message : 'Network error', null);
+    }
+    if (!response.ok) {
+      let body: unknown;
+      try { body = await response.json(); } catch { body = null; }
+      throw new ConfiguratorHttpError(response.status, response.statusText, body);
+    }
+    return response;
   }
 
   private async useElfsquadIdHeader(): Promise<boolean> {
