@@ -204,7 +204,6 @@ export class ConfiguratorContext extends EventTarget {
    * @returns The settings for the current showroom & user.
    */
   public async getSettings(language?: string): Promise<Settings> {
-    console.log('here I am');
     if (!language) language = this.rootConfiguration()?.language;
     let url = `${this.options.apiUrl}/configurator/3/configurator/settings`;
     if (language) url += `?lang=${language}`;
