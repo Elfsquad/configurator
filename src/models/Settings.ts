@@ -48,6 +48,8 @@ export interface Settings {
   hideShippingAddressField: boolean;
   checkoutQuotationPropertyIds: string[];
   onConfigurationLeavePopup: boolean;
+  footerMessage?: string;
+  copyrightMessage?: string;
 }
 
 export interface WelcomePageText {
