@@ -50,7 +50,14 @@ export interface Settings {
   onConfigurationLeavePopup: boolean;
   footerMessage?: string;
   copyrightMessage?: string;
+  welcomePageLayout?: WelcomePageLayout;
 }
+
+export const WelcomePageLayout = {
+  FullScreen: 0,
+  SplitScreen: 1,
+};
+export type WelcomePageLayout = (typeof WelcomePageLayout)[keyof typeof WelcomePageLayout];
 
 export interface WelcomePageText {
   languageIso: string | undefined;
