@@ -70,6 +70,7 @@ export interface WelcomePageText {
   inactive: boolean | undefined;
   createdDate: string | undefined;
   updatedDate: string | undefined;
+  subtitle: string | undefined;
 }
 
 export interface AfterOrderText {
