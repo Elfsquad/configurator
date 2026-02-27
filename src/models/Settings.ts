@@ -56,7 +56,7 @@ export interface Settings {
 export const WelcomePageLayout = {
   FullScreen: 0,
   SplitScreen: 1,
-};
+} as const;
 export type WelcomePageLayout = (typeof WelcomePageLayout)[keyof typeof WelcomePageLayout];
 
 export interface WelcomePageText {

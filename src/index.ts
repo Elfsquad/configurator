@@ -33,5 +33,6 @@ export {
   ShowroomFeatureModelSettings,
   WelcomePageText,
   Settings,
+  WelcomePageLayout,
 } from "./models/Settings";
 export { QuotationRequest } from "./models/QuotationRequest";
