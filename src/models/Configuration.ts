@@ -432,6 +432,9 @@ export const FeatureModelRelationshipDisplayType = {
   NonDialogSearchbar: 6,
   Slider: 7,
   Input: 8,
+  Dialog: 9,
+  Chips: 10,
+  Tabs: 11,
 } as const;
 
 export type FeatureModelRelationshipDisplayType =
