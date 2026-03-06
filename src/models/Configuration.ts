@@ -1,4 +1,5 @@
 import { ConfiguratorContext } from "../configurator/ConfiguratorContext";
+import { FeatureModelAttachmentNode } from "./FeatureModelAttachmentNode";
 import { Material } from "./Layout3d";
 
 export class Configuration {
@@ -14,6 +15,14 @@ export class Configuration {
   language: string;
   currency: string;
   languages: { [iso: string]: string };
+  arEnabled: boolean;
+  basePriceInclVat: string;
+  basePrice: number;
+  additionalPriceInclVat: string;
+  additionalPrice: number;
+  foreignAttachmentNodes: { [foreignNodeId: string]: FeatureModelAttachmentNode[] };
+  attachmentNodes: FeatureModelAttachmentNode[];
+  unansweredMandatories: ConfigurationFeature[];
   basePriceExclVat: string;
   additionalPriceExclVat: string;
   totalPriceExclVat: string;
@@ -263,7 +272,7 @@ export class Configuration {
     if (this.conflicts) delete this.conflicts;
 
     for (const key in data) {
-      if (data.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
         this[key] = data[key];
       }
     }
@@ -418,6 +427,7 @@ export const FeatureType = {
   ColorPicker: 2,
   Text: 3,
   Image: 4,
+  File: 5,
 } as const;
 
 export type FeatureType = (typeof FeatureType)[keyof typeof FeatureType];

@@ -36,3 +36,13 @@ export {
   WelcomePageLayout,
 } from "./models/Settings";
 export { QuotationRequest } from "./models/QuotationRequest";
+export { Feature, UnitOfMeasurement } from "./models/Feature";
+export {
+  FeatureProperty,
+  AssociatedFeatureProperty,
+  FeatureHasFeatureProperty,
+  FeaturePropertyText,
+  FeaturePropertyTypes,
+} from "./models/FeatureHasFeatureProperty";
+export { Category, CategoryText } from "./models/category";
+export { FeatureModelAttachmentNode, EntityId } from "./models/FeatureModelAttachmentNode";
