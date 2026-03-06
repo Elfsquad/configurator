@@ -464,6 +464,7 @@ export type FeatureModelRelationshipTypes =
   (typeof FeatureModelRelationshipTypes)[keyof typeof FeatureModelRelationshipTypes];
 
 export interface ConfigurationConflict {
+  featurePath: string[];
   feature: ConfigurationFeature;
   alternativeOptions: ConfigurationFeature[];
   type: ConflictType;
