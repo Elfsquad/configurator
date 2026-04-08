@@ -1,6 +1,6 @@
 {
   "name": "@elfsquad/configurator",
-  "version": "3.6.3",
+  "version": "3.6.4",
   "description": "",
   "scripts": {
     "test": "jest",
@@ -31,7 +31,7 @@
     "/dist"
   ],
   "dependencies": {
-    "@elfsquad/authentication": "^2.0.10"
+    "@elfsquad/authentication": "^3.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
