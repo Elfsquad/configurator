@@ -51,6 +51,7 @@ export interface Settings {
   onConfigurationLeavePopup: boolean;
   footerMessage?: string;
   copyrightMessage?: string;
+  contactEmail?: string;
   welcomePageLayout?: WelcomePageLayout;
 }
 
