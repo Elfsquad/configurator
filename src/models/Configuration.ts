@@ -374,6 +374,8 @@ export const StepType = {
   Overview: 4,
   ThreeD: 5,
   ThirdParty: 7,
+  Cards: 8,
+  R3fViewer: 9,
 } as const;
 
 export type StepType = (typeof StepType)[keyof typeof StepType];
