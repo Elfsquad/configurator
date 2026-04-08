@@ -18,6 +18,7 @@ export interface Settings {
   defaultLanguageIso: string;
   displayVat: boolean;
   logoUrl: string;
+  lightLogoUrl?: string;
   languages: Language[];
   countries: Country[];
   selectedLanguageIso: string;
