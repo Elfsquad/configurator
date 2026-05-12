@@ -53,6 +53,7 @@ export interface Settings {
   copyrightMessage?: string;
   contactEmail?: string;
   welcomePageLayout?: WelcomePageLayout;
+  googleTagManagerContainerId?: string | null;
 }
 
 export const WelcomePageLayout = {
