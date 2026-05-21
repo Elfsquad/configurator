@@ -24,6 +24,7 @@ export interface Settings {
   selectedLanguageIso: string;
   languageIsos: string[];
   mandatoryCrmValues: string;
+  mandatoryCrmContactValues: string;
   afterOrderText: string;
   quotationRequestRedirectUrl: string;
   quotationRequestedAction: number;
@@ -54,6 +55,8 @@ export interface Settings {
   contactEmail?: string;
   welcomePageLayout?: WelcomePageLayout;
   googleTagManagerContainerId?: string | null;
+  enableRecaptcha?: boolean;
+  recaptchaSiteKey?: string;
 }
 
 export const WelcomePageLayout = {
