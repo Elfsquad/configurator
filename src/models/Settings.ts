@@ -54,6 +54,7 @@ export interface Settings {
   copyrightMessage?: string;
   contactEmail?: string;
   welcomePageLayout?: WelcomePageLayout;
+  sidebarPosition?: SidebarPosition;
   googleTagManagerContainerId?: string | null;
   enableRecaptcha?: boolean;
   recaptchaSiteKey?: string;
@@ -64,6 +65,12 @@ export const WelcomePageLayout = {
   SplitScreen: 1,
 } as const;
 export type WelcomePageLayout = (typeof WelcomePageLayout)[keyof typeof WelcomePageLayout];
+
+export const SidebarPosition = {
+  Left: 0,
+  Right: 1,
+} as const;
+export type SidebarPosition = (typeof SidebarPosition)[keyof typeof SidebarPosition];
 
 export interface WelcomePageText {
   languageIso: string | undefined;
