@@ -101,15 +101,24 @@ export class Configuration {
    *
    * @param featureModelNodeId The id of the feature model node to update
    * @param textValue The text value to set on the feature
+   * @param configurationId Optional id of the linked configuration that owns the
+   * node, when it lives in a linked model rather than this one. Must be within this
+   * configuration's linked-configuration subtree; the backend validates it and falls
+   * back to resolving the owner itself when omitted or invalid.
    *
    * @returns A promise that resolves when the text value has been updated
    */
-  public async updateText(featureModelNodeId: string, textValue: string): Promise<void> {
+  public async updateText(
+    featureModelNodeId: string,
+    textValue: string,
+    configurationId?: string
+  ): Promise<void> {
     const result = await this._configuratorContext._put(
       `${this._configuratorContext.options.apiUrl}/configurator/3/configurator/${this.id}/text`,
       {
         featureModelNodeId,
         textValue,
+        ...(configurationId !== undefined ? { configurationId } : {}),
       }
     );
     this._applyConfigurationObject(await result.json());
@@ -128,15 +137,24 @@ export class Configuration {
    *
    * @param featureModelNodeId The id of the feature model node to update
    * @param textValue The image value to set on the feature
+   * @param configurationId Optional id of the linked configuration that owns the
+   * node, when it lives in a linked model rather than this one. Must be within this
+   * configuration's linked-configuration subtree; the backend validates it and falls
+   * back to resolving the owner itself when omitted or invalid.
    *
    * @returns A promise that resolves when the image value has been updated
    */
-  public async updateImage(featureModelNodeId: string, textValue: string): Promise<void> {
+  public async updateImage(
+    featureModelNodeId: string,
+    textValue: string,
+    configurationId?: string
+  ): Promise<void> {
     const result = await this._configuratorContext._put(
       `${this._configuratorContext.options.apiUrl}/configurator/3/configurator/${this.id}/image`,
       {
         featureModelNodeId,
         textValue,
+        ...(configurationId !== undefined ? { configurationId } : {}),
       }
     );
     this._applyConfigurationObject(await result.json());

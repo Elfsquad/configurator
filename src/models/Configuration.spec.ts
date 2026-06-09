@@ -108,6 +108,57 @@ describe("configuration", () => {
     expect(lastRequest.method).toBe("PUT");
   });
 
+  it("should pass configurationId in the body for updateText when supplied", async () => {
+    const configuration = await createTestConfiguration();
+
+    mockNextFetchResponse({ id: "test-id" });
+    await configuration.updateText("node_id", "abc", "linked-id");
+
+    expect(await lastRequest.json()).toEqual({
+      featureModelNodeId: "node_id",
+      textValue: "abc",
+      configurationId: "linked-id",
+    });
+  });
+
+  it("should omit configurationId from the body for updateText when not supplied", async () => {
+    const configuration = await createTestConfiguration();
+
+    mockNextFetchResponse({ id: "test-id" });
+    await configuration.updateText("node_id", "abc");
+
+    const body = await lastRequest.json();
+    expect(body).toEqual({ featureModelNodeId: "node_id", textValue: "abc" });
+    expect(body).not.toHaveProperty("configurationId");
+  });
+
+  it("should pass configurationId in the body for updateImage when supplied", async () => {
+    const configuration = await createTestConfiguration();
+
+    mockNextFetchResponse({ id: "test-id" });
+    await configuration.updateImage("node_id", "https://example.com/image.png", "linked-id");
+
+    expect(await lastRequest.json()).toEqual({
+      featureModelNodeId: "node_id",
+      textValue: "https://example.com/image.png",
+      configurationId: "linked-id",
+    });
+  });
+
+  it("should omit configurationId from the body for updateImage when not supplied", async () => {
+    const configuration = await createTestConfiguration();
+
+    mockNextFetchResponse({ id: "test-id" });
+    await configuration.updateImage("node_id", "https://example.com/image.png");
+
+    const body = await lastRequest.json();
+    expect(body).toEqual({
+      featureModelNodeId: "node_id",
+      textValue: "https://example.com/image.png",
+    });
+    expect(body).not.toHaveProperty("configurationId");
+  });
+
   it("should call correct endpoint for updateName", async () => {
     const configuration = await createTestConfiguration();
 
