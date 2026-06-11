@@ -38,6 +38,11 @@ configuratorContext.getConfigurationModels().then((models) => {
                 console.log('updateTextResult', updateResult);
             });
 
+            // Optionally target a feature owned by a linked configuration by passing its id
+            configuration.updateText(feature.id, 'test 123', linkedConfigurationId).then((updateResult) => {
+                console.log('updateTextResult', updateResult);
+            });
+
             configuration.changeLanguage(Object.keys(models.languages)[2]).then((updateResult) => {
                 console.log('changeLanguage', updateResult);
             });
