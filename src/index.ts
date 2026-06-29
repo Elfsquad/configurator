@@ -11,6 +11,7 @@ export {
   ConfigurationConflict,
   Configuration,
   ConfigurationFeature,
+  ConfigurationFeatureFile,
   ConfigurationRequirement,
   ConfigurationStep,
   ConfigurationValue,

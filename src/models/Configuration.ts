@@ -398,6 +398,11 @@ export const StepType = {
 
 export type StepType = (typeof StepType)[keyof typeof StepType];
 
+export interface ConfigurationFeatureFile {
+  url: string;
+  name: string;
+}
+
 export interface ConfigurationFeature {
   id: string;
   configurationId: string;
@@ -418,6 +423,7 @@ export interface ConfigurationFeature {
   moreInfo?: string;
   unitOfMeasurement?: string;
   imageUrl: string;
+  file?: ConfigurationFeatureFile;
   type: FeatureModelRelationshipTypes;
   features: ConfigurationFeature[];
   isBestMatch: boolean;
