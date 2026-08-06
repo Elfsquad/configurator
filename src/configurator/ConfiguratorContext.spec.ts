@@ -217,6 +217,104 @@ describe("ConfiguratorContext", () => {
     });
   });
 
+  describe("accessTokenProvider", () => {
+    it("should send the provided token as the bearer instead of the anonymous id header", async () => {
+      const ctx = new ConfiguratorContext({
+        apiUrl: API_URL,
+        tenantId: "<TENANT_ID>",
+        accessTokenProvider: () => "provided-token",
+      });
+
+      mockNextFetchResponse({});
+      await ctx.getSettings();
+
+      expect(lastRequest.headers.get("authorization")).toBe("Bearer provided-token");
+      expect(lastRequest.headers.get("x-elfsquad-id")).toBeNull();
+    });
+
+    it("should await an asynchronous provider", async () => {
+      const ctx = new ConfiguratorContext({
+        apiUrl: API_URL,
+        tenantId: "<TENANT_ID>",
+        accessTokenProvider: () => Promise.resolve("async-token"),
+      });
+
+      mockNextFetchResponse({});
+      await ctx.getSettings();
+
+      expect(lastRequest.headers.get("authorization")).toBe("Bearer async-token");
+    });
+
+    it("should fall back to the normal resolution when the provider returns null", async () => {
+      const ctx = new ConfiguratorContext({
+        apiUrl: API_URL,
+        tenantId: "<TENANT_ID>",
+        accessTokenProvider: () => null,
+      });
+
+      mockNextFetchResponse({});
+      await ctx.getSettings();
+
+      expect(lastRequest.headers.get("authorization")).toBeNull();
+      expect(lastRequest.headers.get("x-elfsquad-id")).toBe("<TENANT_ID>");
+    });
+  });
+
+  describe("additionalHeaders", () => {
+    it("should add the resolved headers to requests", async () => {
+      const ctx = new ConfiguratorContext({
+        apiUrl: API_URL,
+        tenantId: "<TENANT_ID>",
+        additionalHeaders: () => ({ "x-elf-orgid": "<ORG_ID>", "x-elf-tenantid": "<TENANT_ID>" }),
+      });
+
+      mockNextFetchResponse({});
+      await ctx.getSettings();
+
+      expect(lastRequest.headers.get("x-elf-orgid")).toBe("<ORG_ID>");
+      expect(lastRequest.headers.get("x-elf-tenantid")).toBe("<TENANT_ID>");
+    });
+
+    it("should be resolved per request", async () => {
+      let orgId = "first";
+      const ctx = new ConfiguratorContext({
+        apiUrl: API_URL,
+        tenantId: "<TENANT_ID>",
+        additionalHeaders: () => ({ "x-elf-orgid": orgId }),
+      });
+
+      mockNextFetchResponse({});
+      await ctx.getSettings();
+      expect(lastRequest.headers.get("x-elf-orgid")).toBe("first");
+
+      orgId = "second";
+      mockNextFetchResponse({});
+      await ctx.getSettings();
+      expect(lastRequest.headers.get("x-elf-orgid")).toBe("second");
+    });
+
+    it("should overwrite headers this library sets itself", async () => {
+      const ctx = new ConfiguratorContext({
+        apiUrl: API_URL,
+        tenantDomain: "test.example.com",
+        additionalHeaders: () => ({ "x-elfsquad-domain": "override.example.com" }),
+      });
+
+      mockNextFetchResponse({});
+      await ctx.getSettings();
+
+      expect(lastRequest.headers.get("x-elfsquad-domain")).toBe("override.example.com");
+    });
+
+    it("should leave requests untouched when no option is supplied", async () => {
+      mockNextFetchResponse({});
+      await configuratorContext.getSettings();
+
+      expect(lastRequest.headers.get("x-elf-orgid")).toBeNull();
+      expect(lastRequest.headers.get("x-elfsquad-id")).toBe("<TENANT_ID>");
+    });
+  });
+
   describe("HTTP error handling", () => {
     it("should throw ConfiguratorHttpError on non-ok response with JSON body", async () => {
       mockNextFetchErrorResponse(401, JSON.stringify({ error: "Unauthorized" }));

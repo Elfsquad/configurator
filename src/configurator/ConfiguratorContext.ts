@@ -423,7 +423,12 @@ export class ConfiguratorContext extends EventTarget {
       input.headers.append("x-elfsquad-domain", this.options.tenantDomain);
     }
 
-    if (await this.useElfsquadIdHeader()) {
+    // A host-supplied token stands in for a signed-in user, so it takes the authenticated
+    // path even when the configured method would otherwise fall back to anonymous.
+    const providedToken = await this.options.accessTokenProvider?.();
+    if (providedToken) {
+      input.headers.set("authorization", `Bearer ${providedToken}`);
+    } else if (await this.useElfsquadIdHeader()) {
       if (this.options.tenantId) {
         input.headers.append("x-elfsquad-id", this.options.tenantId);
       }
@@ -432,6 +437,11 @@ export class ConfiguratorContext extends EventTarget {
         "authorization",
         `Bearer ${await this.authenticationContext.getAccessToken()}`
       );
+    }
+
+    const additionalHeaders = await this.options.additionalHeaders?.();
+    for (const [name, value] of Object.entries(additionalHeaders ?? {})) {
+      input.headers.set(name, value);
     }
 
     let response: Response;
