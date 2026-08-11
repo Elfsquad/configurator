@@ -42,6 +42,34 @@ export interface IConfiguratorOptions {
    * api.elfsquad.io.
    */
   apiUrl?: string | undefined;
+
+  /**
+   * Optionally supply the bearer token for every request, instead of
+   * taking it from the @link{AuthenticationContext}. Use this when the
+   * host application receives a token by another route than the OAuth
+   * flow — for example a token handed over by the embedding
+   * application.
+   *
+   * Returning null or undefined falls back to the normal resolution,
+   * so the host decides per request whether its own token applies.
+   *
+   * Called on every request; return a cached value if resolving it is
+   * expensive.
+   */
+  accessTokenProvider?:
+    | (() => string | null | undefined | Promise<string | null | undefined>)
+    | undefined;
+
+  /**
+   * Optional headers added to every request, resolved per request.
+   * Use for context the host resolves at runtime, such as the
+   * `x-elf-orgid` and `x-elf-tenantid` headers that select the selling
+   * organization and the tenant.
+   *
+   * These are applied last and overwrite headers this library sets
+   * itself.
+   */
+  additionalHeaders?: (() => Record<string, string> | Promise<Record<string, string>>) | undefined;
 }
 
 export type AuthenticationMethod = (typeof AuthenticationMethod)[keyof typeof AuthenticationMethod];
