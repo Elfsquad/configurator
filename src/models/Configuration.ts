@@ -39,6 +39,7 @@ export class Configuration {
   linkedConfigurationModels: LinkedConfigurationModel[];
   linkedConfigurations: LinkedConfiguration[];
   requirements: ConfigurationRequirement[];
+  enforceMandatoriesPerStep: boolean;
 
   private _configuratorContext: ConfiguratorContext;
 
