@@ -58,6 +58,8 @@ export interface Settings {
   googleTagManagerContainerId?: string | null;
   enableRecaptcha?: boolean;
   recaptchaSiteKey?: string;
+  enableConfigurator?: boolean;
+  maintenanceMessage?: MaintenanceMessageText[];
 }
 
 export const WelcomePageLayout = {
@@ -114,4 +116,11 @@ export interface Country {
   englishName: string;
   phonePrefix: string;
   capital: string;
+}
+
+interface MaintenanceMessageText {
+  languageIso?: string;
+  subject?: string;
+  value?: string;
+  settingsId?: string;
 }
