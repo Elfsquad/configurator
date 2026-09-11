@@ -118,7 +118,7 @@ export interface Country {
   capital: string;
 }
 
-interface MaintenanceMessageText {
+export interface MaintenanceMessageText {
   languageIso?: string;
   subject?: string;
   value?: string;
