@@ -36,6 +36,7 @@ export {
   Settings,
   WelcomePageLayout,
   SidebarPosition,
+  MaintenanceMessageText,
 } from "./models/Settings";
 export { QuotationRequest } from "./models/QuotationRequest";
 export { Feature, UnitOfMeasurement } from "./models/Feature";
