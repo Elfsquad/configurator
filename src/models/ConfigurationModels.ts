@@ -3,6 +3,7 @@ export interface ConfigurationModels {
   features: ConfigurationModel[];
   languages: { [iso: string]: string };
   language: string;
+  currencyIso?: string;
 }
 
 export interface ConfigurationModelCategory {
@@ -21,6 +22,8 @@ export interface ConfigurationModel {
   extendedDescription: string;
   moreInfo: string;
   imageUrl: string;
-  startingPriceExclVat: string;
-  startingPriceInclVat: string;
+  startingPriceExclVat?: string;
+  startingPriceInclVat?: string;
+  startingPriceAmountExclVat?: number;
+  startingPriceAmountInclVat?: number;
 }
