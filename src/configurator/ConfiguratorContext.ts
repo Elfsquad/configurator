@@ -139,7 +139,7 @@ export class ConfiguratorContext extends EventTarget {
     includeSearchbarResults: boolean = false
   ): Promise<Configuration> {
     const parameters = new URLSearchParams({
-      language: language ?? "",
+      lang: language ?? "",
       preview: preview?.toString(),
       includeSearchbarResults: includeSearchbarResults?.toString(),
     }).toString();

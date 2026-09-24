@@ -91,6 +91,17 @@ describe("ConfiguratorContext", () => {
     expect(lastRequest.method).toBe("GET");
   });
 
+  it("should call correct endpoint for newConfiguration with language", async () => {
+    mockNextFetchResponse({ id: "test", linkedConfigurationModels: [] });
+
+    await configuratorContext.newConfiguration("test", "nl");
+
+    expect(lastRequest.url).toBe(
+      `${API_URL}/configurator/3/configurator/new/test?lang=nl&preview=false&includeSearchbarResults=false`
+    );
+    expect(lastRequest.method).toBe("GET");
+  });
+
   it("should call correct endpoint for openConfiguration", async () => {
     mockNextFetchResponse({ id: "test-id", linkedConfigurationModels: [] });
 
