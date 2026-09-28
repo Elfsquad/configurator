@@ -422,6 +422,7 @@ export interface ConfigurationFeature {
   description: string;
   extendedDescription?: string;
   moreInfo?: string;
+  customHtml?: string;
   unitOfMeasurement?: string;
   imageUrl: string;
   file?: ConfigurationFeatureFile;
