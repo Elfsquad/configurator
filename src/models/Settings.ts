@@ -1,3 +1,5 @@
+import { ProductFinderQuestionnaire } from "./ProductFinder";
+
 export interface Settings {
   domain: string;
   requireLogin: boolean;
@@ -60,6 +62,9 @@ export interface Settings {
   recaptchaSiteKey?: string;
   enableConfigurator?: boolean;
   maintenanceMessage?: MaintenanceMessageText[];
+  enableProductFinder?: boolean;
+  productFinderQuestionnaire?: ProductFinderQuestionnaire | null;
+  enableProductFinderAssistant?: boolean;
 }
 
 export const WelcomePageLayout = {
