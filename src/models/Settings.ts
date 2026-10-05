@@ -55,6 +55,7 @@ export interface Settings {
   contactEmail?: string;
   welcomePageLayout?: WelcomePageLayout;
   sidebarPosition?: SidebarPosition;
+  productPageTileSize?: ProductPageTileSize;
   googleTagManagerContainerId?: string | null;
   enableRecaptcha?: boolean;
   recaptchaSiteKey?: string;
@@ -73,6 +74,13 @@ export const SidebarPosition = {
   Right: 1,
 } as const;
 export type SidebarPosition = (typeof SidebarPosition)[keyof typeof SidebarPosition];
+
+export const ProductPageTileSize = {
+  Large: 0,
+  Medium: 1,
+  Small: 2,
+} as const;
+export type ProductPageTileSize = (typeof ProductPageTileSize)[keyof typeof ProductPageTileSize];
 
 export interface WelcomePageText {
   languageIso: string | undefined;
