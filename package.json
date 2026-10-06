@@ -1,6 +1,6 @@
 {
   "name": "@elfsquad/configurator",
-  "version": "3.6.17",
+  "version": "3.6.18",
   "description": "",
   "scripts": {
     "test": "jest",

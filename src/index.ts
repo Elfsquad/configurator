@@ -36,6 +36,7 @@ export {
   Settings,
   WelcomePageLayout,
   SidebarPosition,
+  ProductPageTileSize,
   MaintenanceMessageText,
 } from "./models/Settings";
 export { QuotationRequest } from "./models/QuotationRequest";
