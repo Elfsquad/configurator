@@ -48,6 +48,12 @@ export interface Settings {
   hideDeliveryDateField: boolean;
   hideRemarksField: boolean;
   hideShippingAddressField: boolean;
+  hideProductPagePrices: boolean;
+  hideConfiguratorFeaturePrices: boolean;
+  hideConfiguratorTotalPrice: boolean;
+  hideSummaryTotalPrice: boolean;
+  hideSummaryGroupPrices: boolean;
+  hideSummaryLinePrices: boolean;
   checkoutQuotationPropertyIds: string[];
   onConfigurationLeavePopup: boolean;
   footerMessage?: string;
