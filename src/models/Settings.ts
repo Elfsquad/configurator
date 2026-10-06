@@ -56,6 +56,7 @@ export interface Settings {
   welcomePageLayout?: WelcomePageLayout;
   sidebarPosition?: SidebarPosition;
   productPageTileSize?: ProductPageTileSize;
+  productPageDefaultPageSize?: number;
   googleTagManagerContainerId?: string | null;
   enableRecaptcha?: boolean;
   recaptchaSiteKey?: string;
