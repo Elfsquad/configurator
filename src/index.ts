@@ -39,6 +39,13 @@ export {
   ProductPageTileSize,
   MaintenanceMessageText,
 } from "./models/Settings";
+export {
+  ProductFinderQuestionnaire,
+  ProductFinderQuestion,
+  ProductFinderAnswer,
+  ProductFinderText,
+  ProductFinderScore,
+} from "./models/ProductFinder";
 export { QuotationRequest } from "./models/QuotationRequest";
 export { Feature, UnitOfMeasurement } from "./models/Feature";
 export {
