@@ -68,6 +68,8 @@ export interface Settings {
   recaptchaSiteKey?: string;
   enableConfigurator?: boolean;
   maintenanceMessage?: MaintenanceMessageText[];
+  anonymousUploadMaxBytes?: number;
+  anonymousUploadAcceptedTypes?: AnonymousUploadAcceptedType[];
 }
 
 export const WelcomePageLayout = {
@@ -138,4 +140,9 @@ export interface MaintenanceMessageText {
   subject?: string;
   value?: string;
   settingsId?: string;
+}
+
+export interface AnonymousUploadAcceptedType {
+  mimeType: string;
+  extensions: string[];
 }

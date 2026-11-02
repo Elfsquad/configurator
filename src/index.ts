@@ -38,6 +38,7 @@ export {
   SidebarPosition,
   ProductPageTileSize,
   MaintenanceMessageText,
+  AnonymousUploadAcceptedType,
 } from "./models/Settings";
 export { QuotationRequest } from "./models/QuotationRequest";
 export { Feature, UnitOfMeasurement } from "./models/Feature";
