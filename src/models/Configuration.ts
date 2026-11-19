@@ -32,7 +32,12 @@ export class Configuration {
   totalPrice: number;
   autodeskUrn: string;
   autodeskIntegrationApplicationId: string;
-  foreignAutodeskUrns: { [featureModelId: string]: string };
+  /**
+   * Autodesk URNs of linked (foreign) feature models, keyed by the linked model's
+   * **root node id** — not its feature model id. Only legacy linked features are listed
+   * here; linked configurations are not (use `getLayout3d` for those).
+   */
+  foreignAutodeskUrns: { [rootNodeId: string]: string };
   conflicts: ConfigurationConflict[];
   threeDItemsToHide: string[];
   threeDItemMappings: { [featureModelId: string]: Mapped3dItems };
@@ -326,6 +331,14 @@ export interface LinkedConfiguration {
   multiplier: number;
   name: string;
   combinedInView: boolean;
+  /** Selection state of the linked configuration's own nodes, keyed by node id. */
+  values?: { [id: string]: ConfigurationValue };
+  /** Text values of the linked configuration's own nodes, keyed by node id. */
+  textValues?: { [id: string]: string };
+  /** Image values of the linked configuration's own nodes, keyed by node id. */
+  imageValues?: { [id: string]: string };
+  /** Steps of the linked configuration, when the API includes them. */
+  steps?: ConfigurationStep[];
 }
 
 export interface ConfigurationValue {

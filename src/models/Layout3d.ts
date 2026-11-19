@@ -4,9 +4,18 @@ export interface Layout3d {
   configurationId: string;
   urn: string;
   imageUrl: string;
+  /** Position in millimetres (attachment-node units, as the Autodesk viewer uses them). */
   x: number;
+  /** Position in millimetres. */
   y: number;
+  /** Position in millimetres. */
   z: number;
+  /**
+   * The same position in metres, the unit converted glTF models use. Absent on API
+   * versions that predate it.
+   */
+  positionMeters?: { x: number; y: number; z: number };
+  /** Rotation about the Y axis, in radians. */
   rotationY: number;
   mapped3dItems: Mapped3dItems;
   name: string;
